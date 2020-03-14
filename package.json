@@ -1,0 +1,18 @@
+{
+  "name": "shri-nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "appjs",
+  "scripts": {
+    "start": "nodemon ./app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-generator": "^4.16.1",
+    "nodemon": "^2.0.2"
+  }
+}
