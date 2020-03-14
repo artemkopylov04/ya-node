@@ -1,13 +1,15 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const apiRoute = require('./api');
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 const app = express();
 
+app.use(bodyParser())
 app.use('/api', apiRoute);
 
-app.use((err, req, res) => {
-    res.send(err);
+app.use((e, req, res) => {
+    console.error(e);
+    res.sendStatus(e.status);
 })
 
 app.listen(3000, () => {
