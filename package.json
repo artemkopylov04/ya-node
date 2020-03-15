@@ -4,7 +4,8 @@
   "description": "",
   "main": "appjs",
   "scripts": {
-    "start": "nodemon ./app.js",
+    "web": "nodemon ./web.js",
+    "repo": "nodemon ./repo.js",
     "test": "node test.js"
   },
   "author": "",

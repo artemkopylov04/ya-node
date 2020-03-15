@@ -1,10 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const apiRoute = require('./api');
+require('dotenv').config();
 
 const app = express();
 
-app.use(bodyParser())
+app.use(bodyParser.json());
 app.use('/api', apiRoute);
 
 app.use((e, req, res) => {
@@ -12,6 +13,6 @@ app.use((e, req, res) => {
     res.sendStatus(e.status);
 })
 
-app.listen(3000, () => {
-    console.log('Listen 3000');
+app.listen(process.env.WEB_PORT, () => {
+    console.log(`Listen ${process.env.WEB_PORT}`);
 })
