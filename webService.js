@@ -12,6 +12,8 @@ app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use('/api', apiRoute);
 
+// отдавать статику
+
 app.use((err, req, res, next) => {
   console.error(err);
 

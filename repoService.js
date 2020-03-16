@@ -4,8 +4,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 
-const { cloneRepo, getInfo } = require('./helpers/cloneRepo');
-const { instance, authHeader } = require('./helpers/requests');
+const { cloneRepo } = require('./helpers/cloneRepo');
+const { getInfo } = require('./helpers/getInfoAboutCommit');
+const { instance, authHeader } = require('./helpers/request');
 require('dotenv').config();
 
 const app = express();

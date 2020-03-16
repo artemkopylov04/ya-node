@@ -1,5 +1,5 @@
 const express = require('express');
-const { instance, authHeader } = require('../helpers/requests');
+const { instance, authHeader } = require('../helpers/request');
 require('dotenv').config();
 
 const router = express.Router();
@@ -28,18 +28,18 @@ router.post('/settings', async (req, res, next) => {
 
   try {
     await instance({
+      method: 'delete',
+      url: `${process.env.API_URL}/conf`,
+      headers: authHeader,
+    });
+
+    await instance({
       method: 'post',
       url: `${process.env.REPO_URL}:${process.env.REPO_PORT}/clone`,
       data: {
         repoName,
         mainBranch,
       },
-    });
-
-    await instance({
-      method: 'delete',
-      url: `${process.env.API_URL}/conf`,
-      headers: authHeader,
     });
 
     await instance({
@@ -54,10 +54,7 @@ router.post('/settings', async (req, res, next) => {
       headers: authHeader,
     });
 
-    res.json({
-      status: 200,
-      data: {},
-    });
+    res.sendStatus(200);
   } catch (e) {
     next(e);
   }
@@ -114,7 +111,11 @@ router.get('/builds/:buildId/logs', async (req, res, next) => {
       data: buildLogReq.data,
     });
   } catch (e) {
-    next(e);
+    if (e.response.status === 400) {
+      res.sendStatus(400);
+    } else {
+      next(e);
+    }
   }
 });
 
@@ -130,10 +131,7 @@ router.post('/builds/:commitHash', async (req, res, next) => {
       },
     });
 
-    res.json({
-      status: 200,
-      data: {},
-    });
+    res.sendStatus(200);
   } catch (e) {
     next(e);
   }

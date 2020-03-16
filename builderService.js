@@ -1,10 +1,6 @@
 // Приложение отвечающее за билд, очереди
 require('dotenv').config();
-const { instance, authHeader } = require('./helpers/requests');
-
-function errorHandler(e) {
-  console.error(e);
-}
+const { instance, authHeader } = require('./helpers/request');
 
 const getBuilds = async (period) => {
   setTimeout(async () => {
@@ -19,7 +15,7 @@ const getBuilds = async (period) => {
 
       getBuilds(period);
     } catch (e) {
-      errorHandler(e);
+      console.error(e);
     }
   }, period);
 };
@@ -34,6 +30,6 @@ const getBuilds = async (period) => {
 
     getBuilds(conf.period || 1);
   } catch (e) {
-    errorHandler(e);
+    console.error(e);
   }
 })();
