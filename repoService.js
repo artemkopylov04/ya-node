@@ -79,6 +79,7 @@ app.listen(process.env.REPO_PORT, () => {
   });
 
   if (settings.data.data && settings.data.data.period) {
-    setInterval(() => pullRepo(settings.data.data.repoName), settings.data.data.period * 1000);
+    setTimeout(() => pullRepo(settings.data.data.repoName, settings.data.data.period),
+      settings.data.data.period * 1000);
   }
 })();

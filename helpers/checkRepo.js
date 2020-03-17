@@ -35,7 +35,7 @@ function checkRepo(mainBranch, repoName) {
   }
 }
 
-function pullRepo(repoName) {
+function pullRepo(repoName, period) {
   const last = spawn('git', ['--git-dir', `./rep/${repoName}/.git`, 'log', '-1', '--pretty=format:%h']);
 
   last.stdout.on('data', (data) => {
@@ -59,6 +59,7 @@ function pullRepo(repoName) {
         }
         console.log(i);
         console.log(lastHash);
+        pullRepo(repoName, period * 1000);
       });
     });
   });
