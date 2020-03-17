@@ -58,9 +58,6 @@ function pullRepo(repoName, period) {
           } catch (e) { console.error(e); }
           i += 1;
         }
-        console.log(i);
-        console.log(lastHash);
-        console.log(hashes);
         setTimeout(() => {
           pullRepo(repoName, period);
         }, period * 1000);
