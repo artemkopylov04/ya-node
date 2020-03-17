@@ -4,7 +4,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const fs = require('fs');
-const { spawn } = require('child_process');
 
 const { checkRepo } = require('./helpers/checkRepo');
 const { pullRepo } = require('./helpers/pullRepo');
@@ -17,34 +16,26 @@ const app = express();
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 
-app.post('/add', async (req, res, next) => {
+app.post('/add', async (req, res) => {
   const { commitHash } = req.body;
 
-  const checkCommit = spawn('git', ['show', commitHash.toString()]);
+  try {
+    const info = await getInfo(commitHash, process.env.repo);
 
-  checkCommit.on('close', async (code) => {
-    if (code === 0) {
-      try {
-        const info = await getInfo(commitHash);
+    await instance({
+      method: 'post',
+      url: `${process.env.API_URL}/build/request`,
+      data: {
+        commitHash,
+        commitMessage: info.message,
+        branchName: info.branch,
+        authorName: info.author,
+      },
+      headers: authHeader,
+    });
 
-        await instance({
-          method: 'post',
-          url: `${process.env.API_URL}/build/request`,
-          data: {
-            commitHash,
-            commitMessage: info.message,
-            branchName: info.branch,
-            authorName: info.author,
-          },
-          headers: authHeader,
-        });
-
-        res.sendStatus(200);
-      } catch (e) { res.sendStatus(500); }
-    } else {
-      res.sendStatus(500);
-    }
-  });
+    res.sendStatus(200);
+  } catch (e) { res.sendStatus(500); }
 });
 
 app.post('/check', (req, res) => {
@@ -61,7 +52,7 @@ app.delete('/destroy', (req, res) => {
   res.sendStatus(200);
 });
 
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   console.error(err);
 
   res.sendStatus(500);
@@ -80,6 +71,7 @@ app.listen(process.env.REPO_PORT, () => {
   });
 
   if (settings.data.data && settings.data.data.period) {
+    process.env.repo = settings.data.data.repoName;
     setTimeout(() => pullRepo(settings.data.data.repoName, settings.data.data.period),
       settings.data.data.period * 1000);
   }

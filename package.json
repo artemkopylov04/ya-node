@@ -4,10 +4,12 @@
   "description": "",
   "main": "appjs",
   "scripts": {
-    "web": "nodemon ./webService.js",
-    "repo": "nodemon ./repoService.js",
-    "builder": "nodemon ./builderService.js",
-    "test": "node test.js"
+    "web:test": "nodemon ./webService.js",
+    "repo:test": "nodemon ./repoService.js",
+    "builder:test": "nodemon ./builderService.js",
+    "web:prod": "node ./webService.js",
+    "repo:prod": "node ./repoService.js",
+    "builder:prod": "node ./builderService.js"
   },
   "author": "",
   "license": "ISC",

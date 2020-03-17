@@ -23,7 +23,10 @@ function checkRepo(mainBranch, repoName) {
             try {
               await instance({
                 method: 'post',
-                url: `${process.env.WEB_URL}:${process.env.WEB_PORT}/api/builds/${commitHash}`,
+                url: `${process.env.REPO_URL}:${process.env.REPO_PORT}/add`,
+                data: {
+                  commitHash,
+                },
               });
             } catch (e) { console.error(e); }
           } else {
