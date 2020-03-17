@@ -50,13 +50,17 @@ function pullRepo(repoName, period) {
           try {
             await instance({
               method: 'post',
-              url: `${process.env.WEB_URL}:${process.env.WEB_PORT}/api/builds/${hashes[i]}`,
+              url: `${process.env.REPO_URL}:${process.env.REPO_PORT}/add`,
+              data: {
+                commitHash: hashes[i],
+              },
             });
           } catch (e) { console.error(e); }
           i += 1;
         }
         console.log(i);
         console.log(lastHash);
+        console.log(hashes);
         setTimeout(() => {
           pullRepo(repoName, period);
         }, period * 1000);
