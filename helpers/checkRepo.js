@@ -47,7 +47,7 @@ function pullRepo(repoName) {
 
       exec('git log --pretty=format:%h', async (err, hashes) => {
         hashes = hashes.split('\n');
-        const i = 0;
+        let i = 0;
         while (hashes[i] !== lastHash) {
           try {
             await instance({
