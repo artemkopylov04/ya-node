@@ -6,7 +6,8 @@ const morgan = require('morgan');
 const fs = require('fs');
 const { spawn } = require('child_process');
 
-const { checkRepo, pullRepo } = require('./helpers/checkRepo');
+const { checkRepo } = require('./helpers/checkRepo');
+const { pullRepo } = require('./helpers/pullRepo');
 const { getInfo } = require('./helpers/getInfoAboutCommit');
 const { instance, authHeader } = require('./helpers/request');
 require('dotenv').config();
