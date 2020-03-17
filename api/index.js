@@ -4,6 +4,8 @@ require('dotenv').config();
 
 const router = express.Router();
 
+const cacheLogs = {};
+
 router.get('/settings', async (req, res, next) => {
   try {
     const settingsReq = await instance({
@@ -34,8 +36,13 @@ router.post('/settings', async (req, res, next) => {
     });
 
     await instance({
+      method: 'delete',
+      url: `${process.env.REPO_URL}:${process.env.REPO_PORT}/destroy`,
+    });
+
+    await instance({
       method: 'post',
-      url: `${process.env.REPO_URL}:${process.env.REPO_PORT}/clone`,
+      url: `${process.env.REPO_URL}:${process.env.REPO_PORT}/check`,
       data: {
         repoName,
         mainBranch,
@@ -98,23 +105,29 @@ router.get('/builds/:buildId', async (req, res, next) => {
   }
 });
 
-router.get('/builds/:buildId/logs', async (req, res, next) => {
-  try {
-    const buildLogReq = await instance({
-      method: 'get',
-      url: `${process.env.API_URL}/build/log?buildId=${req.params.buildId}`,
-      headers: authHeader,
-    });
 
-    res.json({
-      status: buildLogReq.status,
-      data: buildLogReq.data,
-    });
-  } catch (e) {
-    if (e.response.status === 400) {
-      res.sendStatus(400);
-    } else {
-      next(e);
+// Добавил кэш в оперативку, просрок через 5 минут
+router.get('/builds/:buildId/logs', async (req, res, next) => {
+  if (cacheLogs[req.params.buildId]
+     && (Math.abs(cacheLogs[req.params.buildId].timeout - Date.now())) < 5 * 60 * 1000) {
+    res.send(cacheLogs[req.params.buildId].data);
+  } else {
+    try {
+      const buildLogReq = await instance({
+        method: 'get',
+        url: `${process.env.API_URL}/build/log?buildId=${req.params.buildId}`,
+        headers: authHeader,
+      });
+
+      cacheLogs[req.params.buildId] = { data: buildLogReq.data, timeout: Date.now() };
+
+      res.send(buildLogReq.data);
+    } catch (e) {
+      if (e.response.status === 400) {
+        res.sendStatus(400);
+      } else {
+        next(e);
+      }
     }
   }
 });
