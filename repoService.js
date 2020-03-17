@@ -49,6 +49,7 @@ app.post('/check', (req, res) => {
 app.delete('/destroy', (req, res) => {
   // Node 12.10
   fs.rmdirSync('./rep', { recursive: true });
+  fs.mkdirSync('./rep');
   res.sendStatus(200);
 });
 

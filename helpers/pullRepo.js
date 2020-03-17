@@ -1,12 +1,20 @@
 const { exec } = require('child_process');
-const { instance } = require('./request');
+const { instance, authHeader } = require('./request');
 
 function pullRepo(repoName, period) {
   exec('git log -1 --pretty=format:%h', { cwd: `./rep/${repoName}` }, (err, data) => {
     const lastHash = data.toString().trim();
-    exec('git pull', { cwd: `./rep/${repoName}` }, (err, data) => {
+    exec('git pull', { cwd: `./rep/${repoName}` }, async (err, data) => {
       if (err) {
-        console.error(err);
+        const settings = await instance({
+          method: 'get',
+          url: `${process.env.API_URL}/conf`,
+          headers: authHeader,
+        });
+
+        setTimeout(() => {
+          pullRepo(settings.data.data.repoName, settings.data.data.period);
+        }, period * 1000);
       }
 
       exec('git log --pretty=format:%h', { cwd: `./rep/${repoName}` }, async (err, hashes) => {
