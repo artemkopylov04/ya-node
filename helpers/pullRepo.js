@@ -1,4 +1,5 @@
 const { exec } = require('child_process');
+const { instance } = require('./request');
 
 function pullRepo(repoName, period) {
   exec('git log -1 --pretty=format:%h', { cwd: `./rep/${repoName}` }, (err, data) => {
