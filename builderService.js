@@ -11,13 +11,48 @@ const getBuilds = async (period) => {
         headers: authHeader,
       });
 
-      console.log(builds.data);
+      for (let i = builds.data.data.length - 1; i >= 0; i -= 1) {
+        const build = builds.data.data[i];
+        (async () => {
+          if (build.status === 'Waiting') {
+            try {
+              await instance({
+                method: 'post',
+                url: `${process.env.API_URL}/build/start`,
+                data: {
+                  buildId: build.id,
+                  dateTime: new Date().toISOString(),
+                },
+                headers: authHeader,
+              });
+            } catch (e) { console.error(e); }
+          }
+
+          if (build.status === 'InProgress') {
+            setTimeout(async () => {
+              try {
+                await instance({
+                  method: 'post',
+                  url: `${process.env.API_URL}/build/finish`,
+                  data: {
+                    buildId: build.id,
+                    success: true,
+                    duration: 6789,
+                    buildLog: Math.random().toString(36),
+                  },
+                  headers: authHeader,
+                });
+              } catch (e) { console.error(e); }
+            }, 6789);
+          }
+        })();
+      }
 
       getBuilds(period);
     } catch (e) {
       console.error(e);
     }
-  }, period);
+  }, 3000);
 };
 
 (async () => {

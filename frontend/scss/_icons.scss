@@ -1,0 +1,45 @@
+$static_path: '/static';
+
+.settings-icon {
+    background: url('#{$static_path}/cog_1.svg');
+}
+
+.rebuild-icon {
+    background: url('#{$static_path}/12_rebuild.svg');
+}
+
+.play-icon {
+    background: url('#{$static_path}/12_play.svg');
+}
+
+.clear-icon {
+    background: url('#{$static_path}/16_clear.svg');
+}
+
+.status-done {
+    background: url('#{$static_path}/done_24.svg');
+}
+
+.status-fail {
+    background: url('#{$static_path}/fail_24.svg');
+}
+
+.status-clock {
+    background: url('#{$static_path}/clock_24.svg');
+}
+
+.commit-icon {
+    background: url('#{$static_path}/16_code-commit.svg');
+}
+
+.user-icon {
+    background: url('#{$static_path}/16_user.svg');
+}
+
+.calendar-icon {
+    background: url('#{$static_path}/16_calendar.svg');
+}
+
+.watch-icon {
+    background: url('#{$static_path}/16_stopwatch.svg');
+}

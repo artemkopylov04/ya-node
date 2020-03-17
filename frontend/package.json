@@ -1,0 +1,19 @@
+{
+  "name": "yandex-shri-2020-verstka",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./app.js",
+    "dev": "npx gulp watch"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "gulp": "^4.0.2",
+    "gulp-sass": "^4.0.2",
+    "gulp-svgo": "^2.1.1",
+    "sass": "^1.26.2"
+  }
+}

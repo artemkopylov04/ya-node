@@ -1,0 +1,66 @@
+@use 'vars';
+@use 'fonts';
+@use 'icons';
+
+@use 'layout';
+@use 'blocks/button';
+@use 'blocks/card';
+@use 'blocks/divider';
+@use 'blocks/form';
+@use 'blocks/icon';
+@use 'blocks/input';
+@use 'blocks/log';
+@use 'blocks/text';
+
+html, body {
+    box-sizing: border-box;
+    background: #fff;
+    min-width: 320px;
+    height: 100%;
+}
+
+body {
+    font-family: 'YS Text', Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+* {
+    box-sizing: inherit;
+}
+
+.header {
+    padding: 11px 16px;
+}
+
+.footer {
+    background: #F0F2F3;
+
+    &__link {
+        padding: 0;
+        margin-right: 12px;
+    }
+}
+
+.build-list {
+    &__more {
+        margin-bottom: 20px;
+    }
+}
+
+.start-message {
+    max-width: 264px;
+    text-align: center;
+    line-height: 125%;
+    margin: 32px 0 24px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance:textfield;
+}

@@ -1,0 +1,22 @@
+.icon {
+    &_size {
+        &_s {
+            width: 12px;
+            height: 12px;
+        }
+
+        &_m {
+            width: 16px;
+            height: 16px;
+        }
+
+        &_l {
+            width: 24px;
+            height: 24px;
+        }
+    }
+
+    &_with-text {
+        margin-right: 5px;
+    }
+}

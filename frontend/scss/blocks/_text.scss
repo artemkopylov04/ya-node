@@ -1,0 +1,41 @@
+@use 'vars';
+
+.text {
+    &_size {
+        &_m {
+            font-size: 13px;
+        }
+
+        &_l {
+            font-size: 15px;
+        }
+    
+        &_xl {
+            font-size: 24px;
+
+            @media (max-width: vars.$breakpoint_small) {
+                font-size: 18px;
+            }
+        }
+    }
+
+    &_color {
+        &_title {
+            color: #7F8285;
+        }
+
+        &_repo {
+            color: #000000;
+        }
+    }
+
+    &_required{
+        color: #FF3333;
+    }
+
+    &_no-wrap {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
