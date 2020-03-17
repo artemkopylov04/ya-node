@@ -36,16 +36,14 @@ function checkRepo(mainBranch, repoName) {
 }
 
 function pullRepo(repoName, period) {
-  const last = spawn('git', ['--git-dir', `./rep/${repoName}/.git`, 'log', '-1', '--pretty=format:%h']);
-
-  last.stdout.on('data', (data) => {
+  exec('git log -1 --pretty=format:%h', { cwd: `./rep/${repoName}` }, (err, data) => {
     const lastHash = data.toString().trim();
     exec('git pull', { cwd: `./rep/${repoName}` }, (err, data) => {
       if (err) {
         console.error(err);
       }
 
-      exec('git log --pretty=format:%h', async (err, hashes) => {
+      exec('git log --pretty=format:%h', { cwd: `./rep/${repoName}` }, async (err, hashes) => {
         hashes = hashes.split('\n');
         let i = 0;
         while (hashes[i] !== lastHash) {
@@ -59,7 +57,9 @@ function pullRepo(repoName, period) {
         }
         console.log(i);
         console.log(lastHash);
-        pullRepo(repoName, period * 1000);
+        setTimeout(() => {
+          pullRepo(repoName, period);
+        }, period * 1000);
       });
     });
   });
