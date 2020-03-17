@@ -1,28 +1,9 @@
-const { spawn } = require('child_process');
+const { spawn, exec } = require('child_process');
 const fs = require('fs');
 const { instance } = require('./request');
 
 function checkRepo(mainBranch, repoName) {
-  if (fs.existsSync(`./rep/${repoName}`)) {
-    const pull = spawn('git', ['--git-dir', `./rep/${repoName}/.git`, 'pull']);
-
-    pull.on('close', (code) => {
-      if (code === 0) {
-        // const log = spawn('git', ['--git-dir', `./rep/${repoName}/.git`, 'log', '-1', '--pretty=format:"%H"']);
-
-        // log.stdout.on('data', async (data) => {
-        //   const commitHash = data.toString().replace(new RegExp('"', 'g'), '');
-
-        //   try {
-        //     await instance({
-        //       method: 'post',
-        //       url: `${process.env.WEB_URL}:${process.env.WEB_PORT}/api/builds/${commitHash}`,
-        //     });
-        //   } catch (e) { console.error(e); }
-        // });
-      }
-    });
-  } else {
+  if (!fs.existsSync(`./rep/${repoName}`)) {
     const clone = spawn('git', ['clone', `https://github.com/artemkopylov04/${repoName}.git`, `./rep/${repoName}`]);
 
     clone.on('close', (code) => {
@@ -54,4 +35,33 @@ function checkRepo(mainBranch, repoName) {
   }
 }
 
-module.exports = { checkRepo };
+function pullRepo(repoName) {
+  const last = spawn('git', ['--git-dir', `./rep/${repoName}/.git`, 'log', '-1', '--pretty=format:%h']);
+
+  last.stdout.on('data', (data) => {
+    const lastHash = data.toString().trim();
+    exec('git pull', { cwd: `./rep/${repoName}` }, (err, data) => {
+      if (err) {
+        console.error(err);
+      }
+
+      exec('git log --pretty=format:%h', async (err, hashes) => {
+        hashes = hashes.split('\n');
+        const i = 0;
+        while (hashes[i] !== lastHash) {
+          try {
+            await instance({
+              method: 'post',
+              url: `${process.env.WEB_URL}:${process.env.WEB_PORT}/api/builds/${commitHash}`,
+            });
+          } catch (e) { console.error(e); }
+          i += 1;
+        }
+        console.log(i);
+        console.log(lastHash);
+      });
+    });
+  });
+}
+
+module.exports = { checkRepo, pullRepo };

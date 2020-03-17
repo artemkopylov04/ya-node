@@ -6,7 +6,7 @@ const morgan = require('morgan');
 const fs = require('fs');
 const { spawn } = require('child_process');
 
-const { checkRepo } = require('./helpers/checkRepo');
+const { checkRepo, pullRepo } = require('./helpers/checkRepo');
 const { getInfo } = require('./helpers/getInfoAboutCommit');
 const { instance, authHeader } = require('./helpers/request');
 require('dotenv').config();
@@ -69,3 +69,16 @@ app.use((err, req, res, next) => {
 app.listen(process.env.REPO_PORT, () => {
   console.log(`Listen ${process.env.REPO_PORT}`);
 });
+
+// Пул изменений и отправка в билд
+(async () => {
+  const settings = await instance({
+    method: 'get',
+    url: `${process.env.API_URL}/conf`,
+    headers: authHeader,
+  });
+
+  if (settings.data.data && settings.data.data.period) {
+    setInterval(() => pullRepo(settings.data.data.repoName), settings.data.data.period * 1000);
+  }
+})();
