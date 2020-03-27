@@ -1,23 +1,12 @@
 import React from 'react';
-import Text from './components/Text';
+import Footer from './components/Footer/Footer';
+import Start from './views/Start/Start';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-      <Text content="Hi, Hi" />
+    <div className="layout_display_flex layout_direction_column layout_height_100">
+    <Start />
+    <Footer />
     </div>
   );
 }

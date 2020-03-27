@@ -1,0 +1,68 @@
+@import 'vars';
+
+.form {
+    max-width: 474px;
+
+    &__group {
+        margin-bottom: 18px;
+    }
+
+    &__label {
+        margin-bottom: 6px;
+    }
+
+    &__input {
+        position: relative;
+
+        &_clear-icon {
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+    }
+    
+    &__title {
+        font-weight: bold;
+        height: 20px;
+        margin: 8px 0;
+    }
+
+    &__description {
+        color: #7F8285;
+        height: 18px;
+        margin-bottom: 22px;
+    }
+
+    &__synchronize-block {
+        height: 60px;
+        margin-bottom: 12px;
+    }
+
+    &__github-repo {
+        height: 60px;
+    }
+
+    &__btn_save {
+        margin-right: 8px;
+
+        @media (max-width: $breakpoint_small) {
+            margin-right: 0;
+            margin-bottom: 12px;
+        }
+    }
+
+    &__btn_save, &__btn_cancel {
+        outline: none;
+        border: 0;
+        
+        &:focus {
+            padding-right: 18px;
+            padding-left: 18px;
+        }
+
+        &:disabled {
+            background: #F2F2F2;
+        }
+    }
+}

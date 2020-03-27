@@ -1,8 +1,9 @@
 import React from 'react';
+import './Text.scss';
 
 function Text(props) {
   return (
-    <div>{props.content}</div>
+    <div className={props.class}>{props.content}</div>
   );
 }
 
