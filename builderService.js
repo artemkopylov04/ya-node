@@ -1,8 +1,12 @@
-// Приложение отвечающее за билд, очереди
+// Приложение отвечающее за билд
 require('dotenv').config();
 const { instance, authHeader } = require('./helpers/request');
 
-const getBuilds = async (period) => {
+function errorHandler(message) {
+  console.error(message);
+}
+
+(async function builder() {
   setTimeout(async () => {
     try {
       const builds = await instance({
@@ -25,7 +29,7 @@ const getBuilds = async (period) => {
                 },
                 headers: authHeader,
               });
-            } catch (e) { console.error(e); }
+            } catch (e) { errorHandler('/build/start error'); }
           }
 
           if (build.status === 'InProgress') {
@@ -42,29 +46,15 @@ const getBuilds = async (period) => {
                   },
                   headers: authHeader,
                 });
-              } catch (e) { console.error(e); }
+              } catch (e) { errorHandler('/build/finish error'); }
             }, 6789);
           }
         })();
       }
 
-      getBuilds(period);
+      builder();
     } catch (e) {
-      console.error(e);
+      errorHandler('list error');
     }
   }, 3000);
-};
-
-(async () => {
-  try {
-    const conf = await instance({
-      method: 'get',
-      url: `${process.env.API_URL}/conf`,
-      headers: authHeader,
-    });
-
-    getBuilds(conf.period || 1);
-  } catch (e) {
-    console.error(e);
-  }
-})();
+}());
