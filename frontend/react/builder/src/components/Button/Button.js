@@ -14,12 +14,22 @@ function Button(props) {
     text = <Text class={props.textClasses} content={props.content}/>
   }
 
-  return (
-    <div className={props.buttonClasses}>
-      {text}
-      {icon}
-    </div>
-  );
+  if (props.inputClasses) {
+    return (
+      <button className={props.inputClasses + " " + props.buttonClasses}>
+        {icon}
+        {text}
+      </button>
+    );
+  } else {
+    return (
+      <button className={props.buttonClasses}>
+        {icon}
+        {text}
+      </button>
+    );
+  }
+  
 }
 
 export default Button;

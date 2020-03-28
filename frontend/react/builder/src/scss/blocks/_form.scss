@@ -43,6 +43,14 @@
         height: 60px;
     }
 
+    &__buttons {
+        display: flex;
+
+        @media (max-width: $breakpoint_small) {
+            flex-direction: column;
+        }
+    }
+
     &__btn_save {
         margin-right: 8px;
 
@@ -53,14 +61,6 @@
     }
 
     &__btn_save, &__btn_cancel {
-        outline: none;
-        border: 0;
-        
-        &:focus {
-            padding-right: 18px;
-            padding-left: 18px;
-        }
-
         &:disabled {
             background: #F2F2F2;
         }

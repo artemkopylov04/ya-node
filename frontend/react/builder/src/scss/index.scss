@@ -26,35 +26,26 @@ body {
     box-sizing: inherit;
 }
 
+#root {
+    height: inherit;
+    display: flex;
+}
+
+.page {
+    display: flex;
+    flex-direction: column;
+    flex: 1;    
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    flex: 1; 
+}
+
 .build-list {
     &__more {
         margin-bottom: 20px;
-    }
-}
-
-.start-message {
-    max-width: 264px;
-    text-align: center;
-    line-height: 125%;
-    margin: 32px 0 24px;
-}
-
-.layout {
-    
-    &_display_flex {
-        display: flex;
-    }
-
-    &_height_100 {
-        height: 100%;
-    }
-    
-    &_direction_column {
-        flex-direction: column;
-    }
-
-    &_flex_full_size {
-        flex: 1;
     }
 }
 
@@ -64,10 +55,6 @@ body {
     justify-content: center;
 
     &__container {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
 
         max-width: 824px;
 		min-width: 320px;
@@ -78,7 +65,7 @@ body {
 .header {
     display: flex;
     justify-content: center;
-    padding: 11px 16px;
+    height: 50px;
 
     &__container {
         display: flex;

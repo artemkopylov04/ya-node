@@ -1,12 +1,14 @@
 import React from 'react';
 import Footer from './components/Footer/Footer';
 import Start from './views/Start/Start';
+import Settings from './views/Settings/Settings';
 
 function App() {
   return (
-    <div className="layout_display_flex layout_direction_column layout_height_100">
-    <Start />
-    <Footer />
+    <div className="page">
+      <Start />
+      {/* <Settings /> */}
+      <Footer />
     </div>
   );
 }

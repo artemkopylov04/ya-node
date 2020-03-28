@@ -1,0 +1,14 @@
+
+.start {    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.start-message {
+    max-width: 264px;
+    text-align: center;
+    line-height: 125%;
+    margin: 32px 0 24px;
+}

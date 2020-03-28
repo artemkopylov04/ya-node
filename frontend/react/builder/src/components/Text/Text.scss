@@ -19,6 +19,22 @@
         }
     }
 
+    &_margin {
+        &_s {
+            margin-right: 13px;
+            margin-left: 13px;
+
+            &_with-icon {
+                margin-left: 0;
+            }
+        }
+
+        &_m {
+            margin-right: 18px;
+            margin-left: 18px;
+        }
+    }
+
     &_color {
         &_title {
             color: #7F8285;
@@ -37,5 +53,14 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+    }
+
+    &_mobile{
+        &_hidden {
+            @media (max-width: $breakpoint_small) {  
+                display: none;
+                margin: 0;
+            }
+        }
     }
 }
