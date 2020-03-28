@@ -49,12 +49,6 @@
         color: #FF3333;
     }
 
-    &_no-wrap {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
     &_mobile{
         &_hidden {
             @media (max-width: $breakpoint_small) {  

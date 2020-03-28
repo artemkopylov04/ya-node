@@ -59,7 +59,6 @@ function Start(props) {
                     </div>
                     <div class="form__buttons flex flex_mobile_direction_column">
                         <Input 
-                            tabindex={0}
                             isText
                             submit
                             inputClasses="form__btn_save"
@@ -68,7 +67,6 @@ function Start(props) {
                             content="Save"
                             />
                         <Input 
-                            tabindex={1}
                             isText
                             submit
                             inputClasses="form__btn_cancel"

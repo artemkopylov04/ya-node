@@ -2,9 +2,7 @@
 
 @import 'layout';
 @import 'blocks/card';
-@import 'blocks/divider';
 @import 'blocks/form';
-@import 'blocks/input';
 @import 'blocks/log';
 
 html, body {
@@ -76,5 +74,11 @@ body {
         max-width: 824px;
 		min-width: 320px;
 		padding: 0 16px;
+    }
+
+    &__buttons {
+        display: grid;
+        grid-auto-flow: column;
+        grid-gap: 8px;
     }
 }

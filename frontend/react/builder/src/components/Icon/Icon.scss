@@ -19,7 +19,7 @@
     }
 
     &_margin_s {
-        margin: 8px;
+        margin: 6px;
 
         &_with-text {
             margin-right: 5px;
@@ -28,7 +28,7 @@
         &_mobile {
             &_full {
                 @media (max-width: $breakpoint_small) {  
-                    margin: 8px;
+                    margin: 6px;
                 }
             }
         }

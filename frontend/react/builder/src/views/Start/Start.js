@@ -27,7 +27,7 @@ function Start(props) {
                 <Button 
                     isText
                     buttonClasses="button button_success button_size_m"
-                    textClasses="text text_size_m text_margin_m"
+                    textClasses="start__open-settings-button text text_size_m text_margin_m"
                     content="Open Settings"/>
             </div>
         </div>

@@ -1,6 +1,7 @@
 @import 'vars';
 
 .card {
+    display: flex;
     padding: 12px 24px 4px;
     min-height: 60px;
     box-shadow: 0px 1px 1px rgba(67, 68, 69, 0.3), 0px 0px 1px rgba(67, 68, 69, 0.3);  
@@ -18,11 +19,64 @@
         margin-bottom: 12px;
     }
 
+    &__info {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        flex: 1;
+    }
+
+    &__commit-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    &__commit-about {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+
+        &_extended_true {
+            @media (max-width: $breakpoint_small) {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    }
+
+    &__commit-message {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+
+        &_extended_true {
+            @media (max-width: $breakpoint_small) {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    }
+
+    &__commit-times {
+        display: flex;
+        justify-content: flex-start;
+    }
+
+    &__message {
+        margin-bottom: 8px;
+    }
+
     &__status, &__commit-date {
         margin-right: 10px;
     }
 
     &__branch {
+        &-info {
+            display: flex;
+            margin-bottom: 8px;
+        }
+
         &-hash {
             color: #595959;
             margin-right: 10px;
@@ -35,6 +89,11 @@
         }
     }
 
+    &__commiter {
+        display: flex;
+        margin-bottom: 8px;
+    }
+
     &__user {
         &-name, &-icon {
             max-width: 120px;
@@ -43,6 +102,10 @@
     }
 
     &__build-duration, &__commit-date {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        margin-bottom: 8px;
         color: #595959;
         max-width: 120px;
     }
@@ -54,6 +117,7 @@
     &__ticket {
         font-size: 18px;
         margin-right: 4px;
+        margin-bottom: 8px;
 
         &_done {
             color: #00B341;

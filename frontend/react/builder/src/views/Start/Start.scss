@@ -4,6 +4,13 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    &__open-settings-button {
+        max-width: 300px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
 }
 
 .start-message {
