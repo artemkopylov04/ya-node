@@ -21,3 +21,9 @@ gulp.task('svg', () => {
         .pipe(svgo())
         .pipe(gulp.dest('dest/svg'));
 });
+
+gulp.task('react', function () {
+  return gulp.src('./scss/**/*.scss')
+    .pipe(sass().on('error', sass.logError))
+    .pipe(gulp.dest('./react/builder/src'));
+});

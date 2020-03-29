@@ -28,18 +28,30 @@ router.post('/settings', async (req, res, next) => {
     repoName, mainBranch, buildCommand, period,
   } = req.body;
 
+  let error;
+
   try {
     await instance({
       method: 'delete',
       url: `${process.env.API_URL}/conf`,
       headers: authHeader,
     });
+  } catch (e) {
+    error = true;
+    console.error('delete conf error');
+  }
 
+  try {
     await instance({
       method: 'delete',
       url: `${process.env.REPO_URL}:${process.env.REPO_PORT}/destroy`,
     });
+  } catch (e) {
+    error = true;
+    console.error('delete repo error');
+  }
 
+  try {
     await instance({
       method: 'post',
       url: `${process.env.REPO_URL}:${process.env.REPO_PORT}/check`,
@@ -48,7 +60,12 @@ router.post('/settings', async (req, res, next) => {
         mainBranch,
       },
     });
+  } catch (e) {
+    error = true;
+    console.error('check repo error');
+  }
 
+  try {
     await instance({
       method: 'post',
       url: `${process.env.API_URL}/conf`,
@@ -60,10 +77,15 @@ router.post('/settings', async (req, res, next) => {
       },
       headers: authHeader,
     });
-
-    res.sendStatus(200);
   } catch (e) {
-    next(e);
+    error = true;
+    console.error('post conf error');
+  }
+
+  if (error) {
+    res.sendStatus(500);
+  } else {
+    res.sendStatus(200);
   }
 });
 

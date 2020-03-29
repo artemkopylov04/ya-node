@@ -6,6 +6,21 @@ import './Card.scss';
 
 function Card(props) {
 
+    let status;
+    switch(props.status) {
+        case 'Waiting':
+            status = 'clock';
+            break;
+        case 'inProgress':
+            status = 'done';
+            break;
+        case 'Failed':
+            status = 'fail';
+            break;
+        default:
+            status = 'fail'
+            break; 
+    }
     const extended = props.extended ? 'true' : 'false';
     const ticket = props.ticket;
     const message = props.message;
@@ -18,12 +33,12 @@ function Card(props) {
     return (
         <div className={"card card__extended_" + extended}>
             <div className="card__status">
-                <Icon class="icon icon_size_l icon_done"/>
+                <Icon class={"icon icon_size_l icon_" + status}/>
             </div>
             <div className={"card__info card__info_extended_" + extended}>
                 <div className="card__commit-info">
                     <div className={"card__commit-message card__commit-message_extended_" + extended}>
-                        <Text class="card__ticket card__ticket_done text" content={ticket}/>
+                        <Text class={`card__ticket card__ticket_${status} text`} content={ticket}/>
                         <Text class="card__message text text_size_l" content={message}/>
                     </div>
                     <div className={"card__commit-about card__commit-about_extended_" + extended}>

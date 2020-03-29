@@ -3,7 +3,7 @@ import Text from '../../components/Text/Text';
 import Form from '../../components/Form/Form';
 import './Settings.scss';
 
-function Settings(props) {
+function Settings({settings, setSettings, setSettingsAreSet}) {
   return (
     <div className="content">
         <div className="header">
@@ -15,7 +15,11 @@ function Settings(props) {
         </div>
         <div className="main">
             <div className="main__container">
-                <Form />
+                <Form 
+                    settings={settings}
+                    setSettings={setSettings}
+                    setSettingsAreSet={setSettingsAreSet} 
+                />
             </div> 
         </div>
     </div>

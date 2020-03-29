@@ -22,14 +22,16 @@
 	}
 }
 
-.flex {
-	display: flex;
+.layout {
+	&_flex {
+		display: flex;
+	}
 
-	&-1 {
+	&_dominate {
 		flex: 1;
 	}
 
-	&-0 {
+	&_recessive {
 		flex: 0;
 	}
 
@@ -39,7 +41,7 @@
 		}
 	}
 
-	&_jc {
+	&_justify-content {
 		&_center {
 			justify-content: center;
 		}
@@ -53,7 +55,7 @@
 		}
 	}
 
-	&_ai {
+	&_align {
 		&_center {
 			align-items: center;
 		}
@@ -61,7 +63,7 @@
 }
 
 @media (max-width: vars.$breakpoint_small) {
-	.flex {
+	.layout_flex {
 		&_mobile {
 			display: flex;
 

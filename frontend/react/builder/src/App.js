@@ -1,9 +1,6 @@
-import React from 'react';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route
-} from "react-router-dom";
+import React, {useEffect, useState} from 'react';
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import axios from 'axios';
 
 import Start from './views/Start/Start';
 import Settings from './views/Settings/Settings';
@@ -13,29 +10,63 @@ import History from './views/History/History';
 import Footer from './components/Footer/Footer';
 
 function App() {
+
+  const [settings, setSettings] = useState({});
+  const [settingsAreSet, setSettingsAreSet] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    axios(
+      '/api/settings',
+    )
+    .then(({data}) => { 
+      const resData = data.data.data;
+      if (resData.repoName &&
+        resData.buildCommand && resData.mainBranch && resData.period) {
+        setSettings({
+          repoName: resData.repoName,
+          buildCommand: resData.buildCommand,
+          mainBranch: resData.mainBranch,
+          period: resData.period,
+        });
+        setSettingsAreSet(true);
+      } else {
+        setSettings({
+          repoName: '',
+          buildCommand: '',
+          mainBranch: '',
+          period: '',
+        });
+      }
+      setIsLoaded(true);
+    })
+    .catch(e => console.error(e));
+ }, []);
+
   return (
     <div className="page">
-      <Router>
-        <Switch>
-          <Route exact path="/">
-            <Start />
-          </Route>
-          <Route path="/settings">
-            <Settings />
-          </Route>
-          <Route path="/details">
-            <Details />
-          </Route>
-          <Route path="/history">
-            <History />
-          </Route>
-          <Route>
-            <Start />
-          </Route>
-        </Switch>
-      </Router>
-      
-      <Footer />
+      {isLoaded && 
+        <Router>
+          <Switch>
+            <Route path="/settings">
+              <Settings 
+                settings={settings} 
+                setSettings={setSettings} 
+                setSettingsAreSet={setSettingsAreSet} 
+              />
+              <Footer />
+            </Route>
+            <Route path="/build">
+              <Details />
+              <Footer />
+            </Route>
+            <Route>
+            {settingsAreSet ? <History settings={settings}/> : <Start />}
+            <Footer />
+            </Route>
+          </Switch>
+        </Router>
+      }
     </div>
   );
 }

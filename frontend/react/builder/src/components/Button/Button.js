@@ -27,7 +27,7 @@ function Button(props) {
     );
   } else {
     return (
-      <button className={props.buttonClasses}>
+      <button className={props.buttonClasses} onClick={props.onClick}>
         {icon}
         {text}
       </button>

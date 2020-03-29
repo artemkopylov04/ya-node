@@ -1,0 +1,31 @@
+@use '../vars';
+
+.footer {
+    background: #F0F2F3;
+    display: flex;
+    justify-content: center;
+
+    &__container {
+        display: flex;
+        flex: 1;
+        align-items: center;
+        justify-content: space-between;
+        max-width: 824px;
+		min-width: 320px;
+        padding: 0 16px;
+        
+        @media (max-width: vars.$breakpoint_small) {
+            flex-direction: column;
+            align-items: start;
+        }
+    }
+
+    &__menu {
+        display: flex;
+    }
+    
+    &__link {
+        padding: 0;
+        margin-right: 12px;
+    }
+}

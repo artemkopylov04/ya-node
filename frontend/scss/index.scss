@@ -1,6 +1,7 @@
 @use 'vars';
 @use 'fonts';
-@use 'icons';
+
+@use 'views/footer.scss';
 
 @use 'layout';
 @use 'blocks/button';
@@ -23,6 +24,8 @@ body {
     font-family: 'YS Text', Arial, sans-serif;
     display: flex;
     flex-direction: column;
+    margin: 0;
+    padding: 0;
 }
 
 * {
@@ -31,15 +34,6 @@ body {
 
 .header {
     padding: 11px 16px;
-}
-
-.footer {
-    background: #F0F2F3;
-
-    &__link {
-        padding: 0;
-        margin-right: 12px;
-    }
 }
 
 .build-list {
@@ -53,14 +47,4 @@ body {
     text-align: center;
     line-height: 125%;
     margin: 32px 0 24px;
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-input[type=number] {
-    -moz-appearance:textfield;
 }

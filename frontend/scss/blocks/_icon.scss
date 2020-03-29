@@ -1,3 +1,5 @@
+@use 'vars';
+
 .icon {
     &_size {
         &_s {
@@ -18,5 +20,49 @@
 
     &_with-text {
         margin-right: 5px;
+    }
+
+    &_settings {
+        background: url('#{vars.$static_path}/cog_1.svg');
+    }
+
+    &_rebuild {
+        background: url('#{vars.$static_path}/12_rebuild.svg');
+    }
+    
+    &_play {
+        background: url('#{vars.$static_path}/12_play.svg');
+    }
+    
+    &_clear {
+        background: url('#{vars.$static_path}/16_clear.svg');
+    }
+    
+    &_done {
+        background: url('#{vars.$static_path}/done_24.svg');
+    }
+    
+    &_fail {
+        background: url('#{vars.$static_path}/fail_24.svg');
+    }
+    
+    &_clock {
+        background: url('#{vars.$static_path}/clock_24.svg');
+    }
+    
+    &_commit {
+        background: url('#{vars.$static_path}/16_code-commit.svg');
+    }
+    
+    &_user {
+        background: url('#{vars.$static_path}/16_user.svg');
+    }
+    
+    &_calendar {
+        background: url('#{vars.$static_path}/16_calendar.svg');
+    }
+    
+    &_watch {
+        background: url('#{vars.$static_path}/16_stopwatch.svg');
     }
 }

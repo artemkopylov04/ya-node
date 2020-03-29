@@ -16,50 +16,6 @@
   font-weight: 700;
   font-style: normal;
 }
-.settings-icon {
-  background: url("/static/cog_1.svg");
-}
-
-.rebuild-icon {
-  background: url("/static/12_rebuild.svg");
-}
-
-.play-icon {
-  background: url("/static/12_play.svg");
-}
-
-.clear-icon {
-  background: url("/static/16_clear.svg");
-}
-
-.status-done {
-  background: url("/static/done_24.svg");
-}
-
-.status-fail {
-  background: url("/static/fail_24.svg");
-}
-
-.status-clock {
-  background: url("/static/clock_24.svg");
-}
-
-.commit-icon {
-  background: url("/static/16_code-commit.svg");
-}
-
-.user-icon {
-  background: url("/static/16_user.svg");
-}
-
-.calendar-icon {
-  background: url("/static/16_calendar.svg");
-}
-
-.watch-icon {
-  background: url("/static/16_stopwatch.svg");
-}
-
 .size_m {
   max-width: 824px;
   min-width: 320px;
@@ -324,6 +280,39 @@
 .icon_with-text {
   margin-right: 5px;
 }
+.icon_settings {
+  background: url("/static/cog_1.svg");
+}
+.icon_rebuild {
+  background: url("/static/12_rebuild.svg");
+}
+.icon_play {
+  background: url("/static/12_play.svg");
+}
+.icon_clear {
+  background: url("/static/16_clear.svg");
+}
+.icon_done {
+  background: url("/static/done_24.svg");
+}
+.icon_fail {
+  background: url("/static/fail_24.svg");
+}
+.icon_clock {
+  background: url("/static/clock_24.svg");
+}
+.icon_commit {
+  background: url("/static/16_code-commit.svg");
+}
+.icon_user {
+  background: url("/static/16_user.svg");
+}
+.icon_calendar {
+  background: url("/static/16_calendar.svg");
+}
+.icon_watch {
+  background: url("/static/16_stopwatch.svg");
+}
 
 .input {
   height: 36px;
@@ -340,6 +329,13 @@
   text-align: right;
   margin: 0 5px;
 }
+.input_number::-webkit-outer-spin-button, .input_number::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.input_number[type=number] {
+  -moz-appearance: textfield;
+}
 .input:focus {
   outline: none;
   border: 2px solid #B3B3B3;
@@ -349,7 +345,7 @@
 }
 
 .log {
-  font-family: Hack;
+  font-family: monospace;
   line-height: 20px;
   letter-spacing: 0.33px;
   color: #000;
@@ -427,14 +423,4 @@ body {
   text-align: center;
   line-height: 125%;
   margin: 32px 0 24px;
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-input[type=number] {
-  -moz-appearance: textfield;
 }

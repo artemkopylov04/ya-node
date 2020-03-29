@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import axios from 'axios';
 import Input from '../Input/Input';
 import Text from '../Text/Text';
 import Icon from '../Icon/Icon';
 import './Form.scss';
 
-function Form(props) {
+function Form({settings, setSettings, setSettingsAreSet}) {
     const history = useHistory();
 
-    const [repoName, setRepoName] = useState('');
-    const [buildCommand, setBuildCommand] = useState('');
-    const [mainBranch, setMainBranch] = useState('');
-    const [period, setPeriod] = useState('');
+    const [repoName, setRepoName] = useState(settings.repoName);
+    const [buildCommand, setBuildCommand] = useState(settings.buildCommand);
+    const [mainBranch, setMainBranch] = useState(settings.mainBranch);
+    const [period, setPeriod] = useState(settings.period);
 
     const [disabled, setDisabled] = useState(false);
 
@@ -45,13 +46,33 @@ function Form(props) {
         }
         if (error === undefined) {
             setDisabled(true);
-            //history.push('/');
+            axios({
+                    method: 'POST',
+                    url: '/api/settings',
+                    data: {
+                        repoName, 
+                        buildCommand, 
+                        mainBranch, 
+                        period: parseInt(period)
+                    }
+                })
+                .then((res) => {
+                    setSettings({
+                        repoName: repoName,
+                        buildCommand: buildCommand,
+                        mainBranch: mainBranch,
+                        period: period,
+                    });
+                    setSettingsAreSet(true); 
+                    history.push('/');
+                })
+                .catch(e => console.error(e));
         }
     }
     const handleCancel = (event) => history.push('/');
 
     return (
-        <div className="form flex flex_direction_column">
+        <div className="form">
             <div className="form__title">
                 <Text class="text text_size_m" content="Settings" />
             </div>
@@ -133,7 +154,7 @@ function Form(props) {
                     <Text class="text text_size_m text_inline" content="minutes" />
                 </div>
             </div>
-            <div className="form__buttons flex flex_mobile_direction_column">
+            <div className="form__buttons">
                 <Input 
                     isText
                     disabled={disabled}
