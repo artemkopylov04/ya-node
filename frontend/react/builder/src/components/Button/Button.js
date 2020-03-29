@@ -16,7 +16,11 @@ function Button(props) {
 
   if (props.inputClasses) {
     return (
-      <button className={props.inputClasses + " " + props.buttonClasses}>
+      <button 
+        disabled={props.disabled}
+        className={props.inputClasses + " " + props.buttonClasses}
+        onClick={props.onClick}
+      >
         {icon}
         {text}
       </button>

@@ -25,6 +25,10 @@
         }
     }
 
+    &_error {
+        border-color: #FA8072;
+    }
+
     &:focus {
         outline: none;
         border: 2px solid #B3B3B3;

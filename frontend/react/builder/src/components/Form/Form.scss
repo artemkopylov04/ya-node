@@ -59,10 +59,4 @@
             margin-bottom: 12px;
         }
     }
-
-    &__btn_save, &__btn_cancel {
-        &:disabled {
-            background: #F2F2F2;
-        }
-    }
 }
