@@ -20,6 +20,12 @@
     }
 
     &_margin {
+        &_inline {
+            &_s {
+                margin-left: 2px;
+            }
+        }
+
         &_s {
             margin-right: 13px;
             margin-left: 13px;
@@ -42,6 +48,16 @@
 
         &_repo {
             color: #000000;
+        }
+    }
+
+    &_inline {
+        display: inline-block;
+    }
+
+    &_decoration {
+        &_none {
+            text-decoration: none;
         }
     }
 

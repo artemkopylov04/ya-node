@@ -1,4 +1,4 @@
-@import 'vars';
+@import '../../scss/vars';
 
 .card {
     display: flex;
@@ -21,9 +21,16 @@
 
     &__info {
         display: flex;
-        flex-direction: column;
         justify-content: space-between;
         flex: 1;
+
+        @media (max-width: $breakpoint_small) {
+            flex-direction: column;
+        }
+
+        &_extended_true {
+            flex-direction: column;
+        }
     }
 
     &__commit-info {
@@ -37,11 +44,9 @@
         justify-content: flex-start;
         align-items: center;
 
-        &_extended_true {
-            @media (max-width: $breakpoint_small) {
-                flex-direction: column;
-                align-items: flex-start;
-            }
+        @media (max-width: $breakpoint_small) {
+            flex-direction: column;
+            align-items: flex-start;
         }
     }
 
@@ -50,17 +55,23 @@
         justify-content: flex-start;
         align-items: center;
 
-        &_extended_true {
-            @media (max-width: $breakpoint_small) {
-                flex-direction: column;
-                align-items: flex-start;
-            }
+        @media (max-width: $breakpoint_small) {
+            flex-direction: column;
+            align-items: flex-start;
         }
     }
 
     &__commit-times {
         display: flex;
         justify-content: flex-start;
+
+        &_extended_false {
+            flex-direction: column;
+
+            @media (max-width: $breakpoint_small) {
+                flex-direction: row;
+            }
+        }
     }
 
     &__message {

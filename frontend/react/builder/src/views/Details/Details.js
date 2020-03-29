@@ -1,8 +1,9 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 import Text from '../../components/Text/Text';
 import Button from '../../components/Button/Button';
-import Icon from '../../components/Icon/Icon';
-import Divider from '../../components/Divider/Divider';
+import Card from '../../components/Card/Card';
+import Log from '../../components/Log/Log';
 import './Details.scss';
 
 const log = ` Starting type checking and linting service... 
@@ -25,7 +26,9 @@ function Details(props) {
         <div className="header">
             <div className="header__container">
                 <div className="header__title">
-                    <Text class="text text_size_xl text_color_repo" content="philip1967/my-awesome-repo" />
+                    <Text 
+                        class="text text_size_xl text_color_repo" 
+                        content="philip1967/my-awesome-repo" />
                 </div>
                 <div className="header__buttons">
                     <Button 
@@ -35,53 +38,29 @@ function Details(props) {
                         textClasses="text text_size_m text_margin_s text_margin_s_with-icon text_mobile_hidden" 
                         iconClasses="icon icon_size_s icon_margin_s icon_margin_s_with-text icon_margin_s_mobile_full icon_rebuild"
                         content="Rebuild"/>
-                    <Button 
-                        isIcon
-                        buttonClasses="button button_primary button_size_s button_size_icon" 
-                        iconClasses="icon icon_size_s icon_margin_s icon_margin_s_with-text icon_margin_s_mobile_full icon_settings"
-                        />
+                    <Link className="text_decoration_none" to="/settings">
+                        <Button 
+                            isIcon
+                            buttonClasses="button button_primary button_size_s button_size_icon" 
+                            iconClasses="icon icon_size_s icon_margin_s icon_margin_s_with-text icon_margin_s_mobile_full icon_settings"
+                            />
+                    </Link>
                 </div>
             </div>
         </div>
         <div className="main">
             <div className="main__container details">
-                <div class="card card__extended_true">
-                    <div class="card__status">
-                        <div class="icon icon_size_l icon_done"></div>
-                    </div>
-                    <div class="card__info">
-                        <div class="card__commit-info">
-                            <div class="card__commit-message card__commit-message_extended_true">
-                                <Text class="card__ticket card__ticket_done text" content="#1368"/>
-                                <Text class="card__message text text_size_l" content="add documentation for postgres scaler"/>
-                            </div>
-                            <div class="card__commit-about card__commit-about_extended_true">
-                                <div class="card__branch-info">
-                                    <Icon class="card__branch-icon icon icon_size_m icon_commit"/>
-                                    <Text class="card__branch-name text text_size_m" content="master"/>
-                                    <Text class="card__branch-hash text text_size_m" content="9c9f0b9"/>
-                                </div>
-                                <div class="card__commiter">
-                                    <Icon class="card__user-icon icon icon_size_m icon_user"/>
-                                    <Text class="card__user-name text text_size_m" content="Philip Kirkorov"/>
-                                </div>
-                            </div>
-                        </div>
-                        <Divider />
-                        <div class="card__commit-times">
-                            <div class="card__commit-date">
-                                <div class="card__commit-date-icon icon icon_size_m icon_calendar"></div>
-                                <div class="text text_size_m">21 янв, 03:06</div>
-                            </div>
-                            <div class="card__build-duration">
-                                <div class="card__build-duration-icon icon icon_size_m icon_watch"></div>
-                                <div class="text text_size_m">1 ч 20 мин</div>
-                            </div>
-                        </div>
-                    </div>
+                <div className="details__card">
+                    <Card extended 
+                        ticket="#1389" 
+                        message="add documentation for postgres scaler" 
+                        branch="master" 
+                        commiter="Artem Kopylov"
+                        date="21 янв, 03:06"
+                        duration="1 ч 20 мин"/>
                 </div>
-                <div>   
-                    <Text class="log text text_size_m" content={log} />
+                <div className="details__log">
+                    <Log content={log} />
                 </div>
             </div>
         </div>

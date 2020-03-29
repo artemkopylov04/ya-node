@@ -1,3 +1,15 @@
+@import '../../scss/vars';
+
 .details {
-    flex: 1;
+    padding: 0;
+
+    &__card {
+        padding: 0 16px;
+    }
+
+    &__log {
+        @media (min-width: $breakpoint_small) {
+            padding: 0 16px;
+        }
+    }
 }
