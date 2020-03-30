@@ -158,7 +158,7 @@ router.post('/builds/:commitHash', async (req, res, next) => {
   try {
     const { commitHash } = req.params;
 
-    await instance({
+    const build = await instance({
       method: 'post',
       url: `${process.env.REPO_URL}:${process.env.REPO_PORT}/add`,
       data: {
@@ -166,7 +166,7 @@ router.post('/builds/:commitHash', async (req, res, next) => {
       },
     });
 
-    res.sendStatus(200);
+    res.json(build.data);
   } catch (e) {
     next(e);
   }

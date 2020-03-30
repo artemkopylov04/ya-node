@@ -56,10 +56,10 @@ function App() {
               />
               <Footer />
             </Route>
-            <Route path="/build">
-              <Details />
-              <Footer />
-            </Route>
+            <Route path="/build/:id" children={[
+              <Details key={1} settings={settings}/>,
+              <Footer key={2} />
+            ]} />
             <Route>
             {settingsAreSet ? <History settings={settings}/> : <Start />}
             <Footer />

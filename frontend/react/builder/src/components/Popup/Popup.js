@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import axios from 'axios';
 import Text from '../Text/Text';
 import Icon from '../Icon/Icon';
 import Input from '../Input/Input';
 import './Popup.scss';
 
 function Popup(props) {
+
+    const history = useHistory();
 
     const [hash, setHash] = useState('');
     const handleHashChange = (event) => setHash(event.target.value);
@@ -14,10 +18,16 @@ function Popup(props) {
 
     const handleSubmit = (event) => {
         setDisabled(true);
-        //history.push('/');
+        axios.post(
+            `/api/builds/${hash}`,
+          )
+          .then(({data}) => {
+            if (data && data.data && data.data.id) {
+                history.push(`/build/${data.data.id}`);
+            }
+          })
+          .catch(e => console.error(e));
     }
-
-    const handleCancel = (event) => {}
 
     return (
         <div className={"popup__layout popup_state_" + props.isOpen}>

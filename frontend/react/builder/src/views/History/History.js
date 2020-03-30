@@ -10,6 +10,7 @@ import './History.scss';
 function History(props) {
     const [popupIsOpen, setPopupIsOpen] = useState(false);
     const [builds, setBuilds] = useState([]);
+    const [isLoaded, setIsLoaded] = useState('history_loading');
 
     useEffect(() => {
         axios(
@@ -17,6 +18,7 @@ function History(props) {
         )
         .then((res) => { 
             setBuilds(res.data.data.data);
+            setIsLoaded('');
         })
         .catch(e => console.error(e));
      }, []);
@@ -30,8 +32,8 @@ function History(props) {
     }
 
     return (
-    <div className="content">
-        <Popup isOpen={popupIsOpen} cancelHandler={closePopup} />
+    <div className={`content`}>
+        <Popup isOpen={popupIsOpen} cancelHandler={closePopup} /> 
         <div className="header">
             <div className="header__container">
                 <div className="header__title">
@@ -57,17 +59,19 @@ function History(props) {
             </div>
         </div>
         <div className="main">
-            <div className="main__container history">
+            <div className={`main__container history ${isLoaded}`}>
                 {builds.map(item => (
                     <Card
                         key={item.id}
+                        id={item.id}
                         status={item.status} 
                         ticket={item.buildNumber} 
                         message={item.commitMessage} 
                         branch={item.branchName}
+                        hash={item.commitHash}
                         commiter={item.authorName}
-                        date="21 янв, 03:06"
-                        duration="1 ч 20 мин"
+                        date={item.start || false}
+                        duration={item.duration || false}
                     />
                 ))}
                 <div className="history-more">

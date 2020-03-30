@@ -22,7 +22,7 @@ app.post('/add', async (req, res) => {
   try {
     const info = await getInfo(commitHash, process.env.repo);
 
-    await instance({
+    const build = await instance({
       method: 'post',
       url: `${process.env.API_URL}/build/request`,
       data: {
@@ -34,7 +34,7 @@ app.post('/add', async (req, res) => {
       headers: authHeader,
     });
 
-    res.sendStatus(200);
+    res.json(build.data);
   } catch (e) { res.sendStatus(500); }
 });
 

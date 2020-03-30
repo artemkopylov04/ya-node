@@ -1,17 +1,22 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import Text from '../Text/Text';
 import Divider from '../Divider/Divider';
 import Icon from '../Icon/Icon';
 import './Card.scss';
 
 function Card(props) {
+    const history = useHistory();
 
     let status;
     switch(props.status) {
-        case 'Waiting':
+        case 'Waiting': 
             status = 'clock';
             break;
-        case 'inProgress':
+        case 'InProgress':
+            status = 'clock';
+            break;
+        case 'Success':
             status = 'done';
             break;
         case 'Failed':
@@ -22,6 +27,7 @@ function Card(props) {
             break; 
     }
     const extended = props.extended ? 'true' : 'false';
+    const id = props.id;
     const ticket = props.ticket;
     const message = props.message;
     const branch = props.branch;
@@ -30,8 +36,12 @@ function Card(props) {
     const date = props.date;
     const duration = props.duration;
 
+    const openBuild = () => {
+        history.push(`/build/${id}`);
+    }
+
     return (
-        <div className={"card card__extended_" + extended}>
+        <div className={"card card__extended_" + extended} onClick={extended === 'false' ? openBuild : null}>
             <div className="card__status">
                 <Icon class={"icon icon_size_l icon_" + status}/>
             </div>
@@ -55,14 +65,18 @@ function Card(props) {
                 </div>
                 <Divider />
                 <div className={"card__commit-times card__commit-times_extended_" + extended}>
-                    <div className="card__commit-date">
-                        <Icon class="card__commit-date-icon icon icon_size_m icon_calendar"/>
-                        <Text class="text text_size_m" content={date}/>
-                    </div>
-                    <div className="card__build-duration">
-                        <Icon class="card__build-duration-icon icon icon_size_m icon_watch"/>
-                        <Text class="text text_size_m" content={duration}/>
-                    </div>
+                    { date &&
+                        <div className="card__commit-date">
+                            <Icon class="card__commit-date-icon icon icon_size_m icon_calendar"/>
+                            <Text class="text text_size_m" date content={date}/>
+                        </div>
+                    }
+                    { duration && 
+                        <div className="card__build-duration">
+                            <Icon class="card__build-duration-icon icon icon_size_m icon_watch"/>
+                            <Text class="text text_size_m" duration content={duration}/>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
