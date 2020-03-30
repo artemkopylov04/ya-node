@@ -1,3 +1,7 @@
+# React
+
+Реакт репозиторий находится внутри frontend/react/builder
+
 # Node.js
 
 Для запуска нужна нода 12.10, использую fs.rmdirSync
