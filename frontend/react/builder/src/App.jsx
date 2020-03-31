@@ -20,7 +20,7 @@ function App() {
     )
       .then(({ data }) => {
         const resData = data.data.data;
-        if (resData.repoName
+        if (resData && resData.repoName
         && resData.buildCommand && resData.mainBranch && resData.period) {
           setSettings({
             repoName: resData.repoName,
@@ -56,13 +56,10 @@ function App() {
               />
               <Footer />
             </Route>
-            <Route
-              path="/build/:id"
-              children={[
-                <Details key={1} settings={settings} />,
-                <Footer key={2} />,
-              ]}
-            />
+            <Route path="/build/:id">
+              <Details settings={settings} />
+              <Footer />
+            </Route>
             <Route>
               {settingsAreSet ? <History settings={settings} /> : <Start />}
               <Footer />

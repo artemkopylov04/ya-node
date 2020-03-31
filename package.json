@@ -4,9 +4,9 @@
   "description": "",
   "main": "appjs",
   "scripts": {
-    "web:test": "nodemon ./webService.js",
-    "repo:test": "nodemon ./repoService.js",
-    "builder:test": "nodemon ./builderService.js",
+    "web:dev": "nodemon ./webService.js",
+    "repo:dev": "nodemon ./repoService.js",
+    "builder:dev": "nodemon ./builderService.js",
     "web:prod": "node ./webService.js",
     "repo:prod": "node ./repoService.js",
     "builder:prod": "node ./builderService.js"

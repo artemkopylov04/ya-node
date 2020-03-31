@@ -1,33 +1,28 @@
-const { exec } = require('child_process');
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
 const fs = require('fs');
 const { instance } = require('./request');
 
-function checkRepo(mainBranch, repoName) {
-  if (!fs.existsSync(`./rep/${repoName}`)) {
-    exec(`git clone https://github.com/artemkopylov04/${repoName}.git ./rep/${repoName}`, (err, data) => {
-      if (err) console.error(err);
-      exec(`git show-branch --sha1-name ${mainBranch.toString()}`, { cwd: `./rep/${repoName}` }, async (err, data) => {
-        if (err) console.error(err);
-        const re = /\[(.*?)\]/g;
-        const commitHashMatch = re.exec(data.toString());
-        if (commitHashMatch[1]) {
-          const commitHash = commitHashMatch[1];
-          try {
-            process.env.repo = repoName;
-            await instance({
-              method: 'post',
-              url: `${process.env.REPO_URL}:${process.env.REPO_PORT}/add`,
-              data: {
-                commitHash,
-              },
-            });
-          } catch (e) { console.error(e); }
-        } else {
-          process.env.ERROR_REPOS = data.toString();
-        }
+async function checkRepo(mainBranch, repoName) {
+  if (!fs.existsSync(`${process.env.REPO_PATH}/${repoName}`)) {
+    try {
+      await instance({
+        method: 'get',
+        url: `${process.env.GIT_URL}/${repoName}`,
       });
-    });
+    } catch (e) {
+      if (e.response.status === 404) return 1;
+    }
+    try {
+      await exec(`git clone ${process.env.GIT_URL}/${repoName}.git ${process.env.REPO_PATH}/${repoName}`);
+      await exec(`git show-branch --sha1-name ${mainBranch.toString()}`, {
+        cwd: `${process.env.REPO_PATH}/${repoName}`,
+      });
+      process.env.repo = repoName;
+      return 0;
+    } catch (e) { console.error('checkRepoError'); }
   }
+  return 1;
 }
 
 module.exports = { checkRepo };

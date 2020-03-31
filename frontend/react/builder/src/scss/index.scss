@@ -84,6 +84,11 @@ body {
 		padding: 0 16px;
     }
 
+    &__title {
+        font-weight: 500;
+        letter-spacing: 0.25px;
+    }
+
     &__buttons {
         display: grid;
         grid-auto-flow: column;

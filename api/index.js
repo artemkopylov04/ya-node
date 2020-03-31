@@ -1,9 +1,12 @@
 const express = require('express');
+const Convert = require('ansi-to-html');
+
 const { instance, authHeader } = require('../helpers/request');
 require('dotenv').config();
 
 const router = express.Router();
 
+const convert = new Convert();
 const cacheLogs = {};
 
 router.get('/settings', async (req, res, next) => {
@@ -141,9 +144,11 @@ router.get('/builds/:buildId/logs', async (req, res, next) => {
         headers: authHeader,
       });
 
-      cacheLogs[req.params.buildId] = { data: buildLogReq.data, timeout: Date.now() };
+      const log = convert.toHtml(buildLogReq.data);
 
-      res.send(buildLogReq.data);
+      cacheLogs[req.params.buildId] = { data: log, timeout: Date.now() };
+
+      res.send(log);
     } catch (e) {
       if (e.response.status === 400) {
         res.sendStatus(400);

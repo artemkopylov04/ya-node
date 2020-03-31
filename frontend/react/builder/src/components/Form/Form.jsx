@@ -74,10 +74,10 @@ function Form({ settings, setSettings, setSettingsAreSet }) {
   return (
     <div className="form">
       <div className="form__title">
-        <Text class="text text_size_m" content="Settings" />
+        <Text class="text text_size_l" content="Settings" />
       </div>
       <div className="form__description">
-        <Text className="text text_size_m" content="Configure repository connection and synchronization settings." />
+        <Text class="text text_size_m" content="Configure repository connection and synchronization settings." />
       </div>
       <div className="form__github-repo form__group">
         <div className="form__label">
@@ -145,17 +145,15 @@ function Form({ settings, setSettings, setSettingsAreSet }) {
         </div>
       </div>
       <div className="form__synchronize-block">
-        <div className="text text_size_m">
-          <Text class="text text_size_m text_inline" content="Synchronize every" />
-          <Input
-            type="number"
-            inputClasses="input input_number text text_size_m"
-            placeholder="15"
-            defaultValue={period}
-            handler={handlePeriodChange}
-          />
-          <Text class="text text_size_m text_inline" content="minutes" />
-        </div>
+        <Text class="text text_size_m text_inline" content="Synchronize every" />
+        <Input
+          type="number"
+          inputClasses="form__input_number input input_number text text_size_m"
+          placeholder="15"
+          defaultValue={period}
+          handler={handlePeriodChange}
+        />
+        <Text class="text text_size_m text_inline" content="minutes" />
       </div>
       <div className="form__buttons">
         <Input

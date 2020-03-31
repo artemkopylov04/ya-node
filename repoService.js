@@ -22,6 +22,7 @@ app.post('/add', async (req, res) => {
   try {
     const info = await getInfo(commitHash, process.env.repo);
 
+    if (!info) throw new Error('not info');
     const build = await instance({
       method: 'post',
       url: `${process.env.API_URL}/build/request`,
@@ -35,27 +36,28 @@ app.post('/add', async (req, res) => {
     });
 
     res.json(build.data);
-  } catch (e) { res.sendStatus(500); }
+  } catch (e) {
+    console.error('add error');
+    res.sendStatus(500);
+  }
 });
 
-app.post('/check', (req, res) => {
+app.post('/check', async (req, res) => {
   const { repoName, mainBranch } = req.body;
 
-  res.sendStatus(200);
+  const code = await checkRepo(mainBranch, repoName);
 
-  checkRepo(mainBranch, repoName);
+  res.sendStatus(code ? 500 : 200);
 });
 
 app.delete('/destroy', (req, res) => {
   // Node 12.10
-  fs.rmdirSync('./rep', { recursive: true });
-  fs.mkdirSync('./rep');
+  fs.rmdirSync(process.env.REPO_PATH, { recursive: true });
+  fs.mkdirSync(process.env.REPO_PATH);
   res.sendStatus(200);
 });
 
 app.use((err, req, res) => {
-  console.error(err);
-
   res.sendStatus(500);
 });
 
@@ -64,16 +66,16 @@ app.listen(process.env.REPO_PORT, () => {
 });
 
 // Пул изменений и отправка в билд
-(async () => {
-  const settings = await instance({
-    method: 'get',
-    url: `${process.env.API_URL}/conf`,
-    headers: authHeader,
-  });
+// (async () => {
+//   const settings = await instance({
+//     method: 'get',
+//     url: `${process.env.API_URL}/conf`,
+//     headers: authHeader,
+//   });
 
-  if (settings.data.data && settings.data.data.period) {
-    process.env.repo = settings.data.data.repoName;
-    setTimeout(() => pullRepo(settings.data.data.repoName, settings.data.data.period),
-      settings.data.data.period * 1000);
-  }
-})();
+//   if (settings.data.data && settings.data.data.period) {
+//     process.env.repo = settings.data.data.repoName;
+//     setTimeout(() => pullRepo(settings.data.data.repoName, settings.data.data.period),
+//       settings.data.data.period * 1000);
+//   }
+// })();

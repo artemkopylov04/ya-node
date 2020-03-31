@@ -8,6 +8,8 @@
     }
 
     &__label {
+        line-height: 18px;
+        letter-spacing: 0.06px;
         margin-bottom: 6px;
     }
 
@@ -20,6 +22,10 @@
             top: 10px;
             right: 10px;
         }
+
+        &_number {
+            margin: 0 9px;
+        }
     }
     
     &__title {
@@ -31,12 +37,12 @@
     &__description {
         color: #7F8285;
         height: 18px;
-        margin-bottom: 22px;
+        letter-spacing: 0.06px;
+        margin-bottom: 21px;
     }
 
     &__synchronize-block {
         height: 60px;
-        margin-bottom: 12px;
     }
 
     &__github-repo {
@@ -52,7 +58,7 @@
     }
 
     &__btn_save {
-        margin-right: 8px;
+        margin-right: 10px;
 
         @media (max-width: $breakpoint_small) {
             margin-right: 0;
