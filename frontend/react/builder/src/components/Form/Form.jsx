@@ -15,6 +15,8 @@ function Form({ settings, setSettings, setSettingsAreSet }) {
   const [period, setPeriod] = useState(settings.period);
 
   const [disabled, setDisabled] = useState(false);
+  const [saveErrorText, setSaveErrorText] = useState('');
+  const [saveErrorStatus, setSaveErrorStatus] = useState(false);
 
   const [repoValidationError, setRepoError] = useState('');
   const [commandValidationError, setCommandError] = useState('');
@@ -66,7 +68,13 @@ function Form({ settings, setSettings, setSettingsAreSet }) {
           setSettingsAreSet(true);
           history.push('/');
         })
-        .catch((e) => console.error(e));
+        .catch((e) => {
+          setSaveErrorStatus(true);
+          setSaveErrorText('Непредвиденная ошибка');
+          setTimeout(() => setSaveErrorStatus(false), 5000);
+          console.error(e);
+        })
+        .finally(() => setDisabled(false));
     }
   };
   const handleCancel = () => history.push('/');
@@ -177,6 +185,11 @@ function Form({ settings, setSettings, setSettingsAreSet }) {
           handler={handleCancel}
         />
       </div>
+      { saveErrorStatus &&
+      <div className="form__error">
+        <Text class="text text_size_l" content={saveErrorText} />
+      </div>
+      }
     </div>
   );
 }

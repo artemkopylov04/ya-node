@@ -10,18 +10,29 @@ import './History.scss';
 function History(props) {
   const [popupIsOpen, setPopupIsOpen] = useState(false);
   const [builds, setBuilds] = useState([]);
+  const [offset, setOffset] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [showMore, setShowMore] = useState(false);
 
   useEffect(() => {
     axios(
-      '/api/builds',
+      `/api/builds?limit=10&offset=${offset}`,
     )
       .then((res) => {
-        setBuilds(res.data.data.data);
+        if (res.data.data.data.length === 10) {
+          setShowMore(true);
+        } else {
+          setShowMore(false);
+        }
+        setBuilds([...builds, ...res.data.data.data]);
         setIsLoaded(true);
       })
       .catch((e) => console.error(e));
-  }, []);
+  }, [offset]);
+
+  const showMoreHandler = () => {
+    setOffset(offset + 10);
+  };
 
   const openPopup = () => {
     setPopupIsOpen(true);
@@ -76,14 +87,17 @@ function History(props) {
               duration={item.duration || false}
             />
           ))}
+          { showMore &&
           <div className="history-more">
             <Button
               isText
               buttonClasses="history-more__button button button_size_s button_primary"
               textClasses="text text_size_m text_margin_m"
+              onClick={showMoreHandler}
               content="Show more"
             />
           </div>
+          }
         </div>
       }
       </div>

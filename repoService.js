@@ -4,9 +4,10 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const fs = require('fs');
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
 
 const { checkRepo } = require('./helpers/checkRepo');
-const { pullRepo } = require('./helpers/pullRepo');
 const { getInfo } = require('./helpers/getInfoAboutCommit');
 const { instance, authHeader } = require('./helpers/request');
 require('dotenv').config();
@@ -65,17 +66,30 @@ app.listen(process.env.REPO_PORT, () => {
   console.log(`Listen ${process.env.REPO_PORT}`);
 });
 
-// Пул изменений и отправка в билд
-// (async () => {
-//   const settings = await instance({
-//     method: 'get',
-//     url: `${process.env.API_URL}/conf`,
-//     headers: authHeader,
-//   });
+// Пул изменений + добавление в process.env настроек
+(async function pullRepo() {
+  const settings = await instance({
+    method: 'get',
+    url: `${process.env.API_URL}/conf`,
+    headers: authHeader,
+  });
 
-//   if (settings.data.data && settings.data.data.period) {
-//     process.env.repo = settings.data.data.repoName;
-//     setTimeout(() => pullRepo(settings.data.data.repoName, settings.data.data.period),
-//       settings.data.data.period * 1000);
-//   }
-// })();
+  if (settings.data && settings.data.data && settings.data.data.period) {
+    process.env.repo = settings.data.data.repoName;
+    process.env.period = settings.data.data.period;
+  }
+
+  try {
+    const pulled = await exec('git pull', {
+      cwd: `${process.env.REPO_PATH}/${process.env.repo}`,
+    });
+    console.log(`Process pull: ${pulled.stdout}`);
+    console.log(`Next pull : ${process.env.period} minutes`);
+  } catch (e) {
+    console.error('pull error');
+  }
+
+  setTimeout(() => {
+    pullRepo();
+  }, process.env.period * 60 * 1000);
+}());

@@ -7,6 +7,7 @@ require('dotenv').config();
 const router = express.Router();
 
 const convert = new Convert();
+
 const cacheLogs = {};
 
 router.get('/settings', async (req, res, next) => {
@@ -96,7 +97,7 @@ router.get('/builds', async (req, res, next) => {
   try {
     const buildsReq = await instance({
       method: 'get',
-      url: `${process.env.API_URL}/build/list`,
+      url: `${process.env.API_URL}/build/list?limit=${req.query.limit || 10}&offset=${req.query.offset || 0}`,
       headers: authHeader,
     });
 
@@ -132,6 +133,8 @@ router.get('/builds/:buildId', async (req, res, next) => {
 
 
 // Добавил кэш в оперативку, просрок через 5 минут
+// От переполнения стоит защита на максимум 1000 записей
+// правда нигде не чистится от старости
 router.get('/builds/:buildId/logs', async (req, res, next) => {
   if (cacheLogs[req.params.buildId]
      && (Math.abs(cacheLogs[req.params.buildId].timeout - Date.now())) < 5 * 60 * 1000) {
@@ -144,11 +147,13 @@ router.get('/builds/:buildId/logs', async (req, res, next) => {
         headers: authHeader,
       });
 
-      const log = convert.toHtml(buildLogReq.data);
+      if (buildLogReq.data.length > 0 && Object.keys(cacheLogs).length < 1000) {
+        const log = convert.toHtml(buildLogReq.data);
 
-      cacheLogs[req.params.buildId] = { data: log, timeout: Date.now() };
+        cacheLogs[req.params.buildId] = { data: log, timeout: Date.now() };
 
-      res.send(log);
+        res.send(log);
+      } else { res.send(''); }
     } catch (e) {
       if (e.response.status === 400) {
         res.sendStatus(400);
