@@ -27,7 +27,7 @@ router.get('/settings', async (req, res, next) => {
   }
 });
 
-router.post('/settings', async (req, res, next) => {
+router.post('/settings', async (req, res) => {
   const {
     repoName, mainBranch, buildCommand, period,
   } = req.body;
