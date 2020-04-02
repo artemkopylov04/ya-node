@@ -1,7 +1,3 @@
-# React
-
-Реакт репозиторий находится внутри frontend/react/builder
-
 # Node.js
 
 Для запуска нужна нода 12.10, использую fs.rmdirSync
@@ -17,7 +13,7 @@ npm run repo:prod
 npm run builder:prod
 ```
 
-Есть PostMan конфиг в папке postman_config
+Есть PostMan конфиг в папке postman
 
 ### Тезисы
 

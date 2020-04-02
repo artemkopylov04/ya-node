@@ -10,7 +10,6 @@ const exec = util.promisify(require('child_process').exec);
 const { checkRepo } = require('./helpers/checkRepo');
 const { getInfo } = require('./helpers/getInfoAboutCommit');
 const { instance, authHeader } = require('./helpers/request');
-require('dotenv').config();
 
 const app = express();
 

@@ -1,5 +1,4 @@
 // Приложение отвечающее за билд
-require('dotenv').config();
 const { instance, authHeader } = require('./helpers/request');
 
 function errorHandler(message) {
@@ -58,3 +57,5 @@ function errorHandler(message) {
     }
   }, 3000);
 }());
+
+console.log('builder is running');

@@ -2,7 +2,6 @@ const express = require('express');
 const Convert = require('ansi-to-html');
 
 const { instance, authHeader } = require('../helpers/request');
-require('dotenv').config();
 
 const router = express.Router();
 

@@ -6,7 +6,6 @@ const morgan = require('morgan');
 const path = require('path');
 const fs = require('fs');
 const apiRoute = require('./api');
-require('dotenv').config();
 
 const app = express();
 
@@ -47,7 +46,7 @@ app.use((req, res, next) => {
   } else res.redirect('/start');
 });
 
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   console.error(err);
 
   res.status(500).end('error');
