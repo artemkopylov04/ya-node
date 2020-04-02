@@ -1,0 +1,21 @@
+@import '../../scss/vars';
+
+.history {
+    display: grid;
+    grid-auto-rows: min-content;
+    grid-gap: 8px;
+}
+
+.history-more { 
+    margin-bottom: 20px;
+
+    @media (max-width: $breakpoint_small) {
+        display: flex;
+    }
+
+    &__button {
+        @media (max-width: $breakpoint_small) {
+            flex: 1;
+        }    
+    }
+}

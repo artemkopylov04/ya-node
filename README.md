@@ -2,15 +2,20 @@
 
 Для запуска нужна нода 12.10, использую fs.rmdirSync
 
+Разворачиваю с помощью pm2
+
 ### Как запускать
 
-В npm scripts package.json выделены скрипты запуска. Всего три микросервиса, тесно связанных между собой. Я тестировал на WSL Ubuntu.
+Устанавливаем pm2:
 
 ```
-npm i
-npm run web:prod
-npm run repo:prod
-npm run builder:prod
+npm i -g pm2
+```
+
+Далее делаем из ecosystem.config.js.example -> ecosystem.config.js, подставляя туда доступы и делаем:
+
+```
+pm2 start ecosystem.config.js
 ```
 
 Есть PostMan конфиг в папке postman
@@ -26,3 +31,10 @@ npm run builder:prod
     - Билдер
 
 - Для запросов - axios, предварительно обернул в инстанс и оформил, как хелпер. Чтобы не плодить код.
+
+# React 
+
+- Использую create-react-app
+- Не использую стейт менеджеры
+
+По вопросам писать в телеграм @APTEM0

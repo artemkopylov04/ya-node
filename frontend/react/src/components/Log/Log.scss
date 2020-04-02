@@ -1,0 +1,16 @@
+.log {
+    display: grid;
+
+    &__container {
+        font-family: monospace;
+        line-height: 20px;
+        white-space: pre;
+        letter-spacing: 0.33px;
+        color: #000;
+        opacity: 0.9;
+        background: #F2F2F2;
+        border-radius: 6px;
+        overflow-x: scroll;
+        margin: 0 0 20px 0;
+    }
+}

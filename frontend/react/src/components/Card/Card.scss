@@ -1,0 +1,145 @@
+@import '../../scss/vars';
+
+.card {
+    display: flex;
+    padding: 12px 24px 4px;
+    min-height: 60px;
+    box-shadow: 0px 1px 1px rgba(67, 68, 69, 0.3), 0px 0px 1px rgba(67, 68, 69, 0.3);  
+    border-radius: 6px;
+
+    &__extended_false {
+        cursor: pointer;
+
+        &:hover {
+            box-shadow: 0px 2px 8px rgba(67, 68, 69, 0.3), 0px 0px 1px rgba(67, 68, 69, 0.3);    
+        }
+    }
+
+    &__extended_true {
+        margin-bottom: 12px;
+    }
+
+    &__info {
+        display: flex;
+        justify-content: space-between;
+        flex: 1;
+
+        @media (max-width: $breakpoint_small) {
+            flex-direction: column;
+        }
+
+        &_extended_true {
+            flex-direction: column;
+        }
+    }
+
+    &__commit-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    &__commit-about {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+
+        @media (max-width: $breakpoint_small) {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+
+    &__commit-message {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+
+        @media (max-width: $breakpoint_small) {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+
+    &__commit-times {
+        display: flex;
+        justify-content: flex-start;
+
+        &_extended_false {
+            flex-direction: column;
+
+            @media (max-width: $breakpoint_small) {
+                flex-direction: row;
+            }
+        }
+    }
+
+    &__message {
+        margin-bottom: 8px;
+    }
+
+    &__status, &__commit-date {
+        margin-right: 10px;
+    }
+
+    &__branch {
+        &-info {
+            display: flex;
+            margin-bottom: 8px;
+        }
+
+        &-hash {
+            color: #595959;
+            margin-right: 10px;
+            max-width: 120px;
+        }
+
+        &-name, &-icon {
+            max-width: 120px;
+            margin-right: 4px;
+        }
+    }
+
+    &__commiter {
+        display: flex;
+        margin-bottom: 8px;
+    }
+
+    &__user {
+        &-name, &-icon {
+            max-width: 120px;
+            margin-right: 4px;
+        }
+    }
+
+    &__build-duration, &__commit-date {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        margin-bottom: 8px;
+        color: #595959;
+        max-width: 120px;
+    }
+
+    &__build-duration-icon, &__commit-date-icon {
+        margin-right: 4px;  
+    }
+
+    &__ticket {
+        font-size: 18px;
+        margin-right: 4px;
+        margin-bottom: 8px;
+
+        &_done {
+            color: #00B341;
+        }
+
+        &_fail {
+            color: #FF3333;
+        }
+
+        &_clock {
+            color: #FF9A00;
+        }
+    }
+}

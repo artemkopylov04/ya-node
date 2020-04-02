@@ -1,0 +1,76 @@
+@import '../../scss/vars';
+
+.text {
+    &_size {
+        &_m {
+            font-size: 13px;
+        }
+
+        &_l {
+            font-size: 15px;
+        }
+    
+        &_xl {
+            font-size: 24px;
+
+            @media (max-width: $breakpoint_small) {
+                font-size: 18px;
+            }
+        }
+    }
+
+    &_margin {
+        &_inline {
+            &_s {
+                margin-left: 2px;
+            }
+        }
+
+        &_s {
+            margin-right: 13px;
+            margin-left: 13px;
+
+            &_with-icon {
+                margin-left: 0;
+            }
+        }
+
+        &_m {
+            margin-right: 18px;
+            margin-left: 18px;
+        }
+    }
+
+    &_color {
+        &_title {
+            color: #7F8285;
+        }
+
+        &_repo {
+            color: #000000;
+        }
+    }
+
+    &_inline {
+        display: inline-block;
+    }
+
+    &_decoration {
+        &_none {
+            text-decoration: none;
+        }
+    }
+
+    &_required{
+        color: #FF3333;
+    }
+
+    &_mobile{
+        &_hidden {
+            @media (max-width: $breakpoint_small) {  
+                display: none;
+                margin: 0;
+            }
+        }
+    }
+}
