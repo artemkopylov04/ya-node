@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
+
+import { setSettings } from './store/actions';
 
 import Start from './views/Start/Start';
 import Settings from './views/Settings/Settings';
@@ -10,63 +13,54 @@ import History from './views/History/History';
 import Footer from './components/Footer/Footer';
 
 function App() {
-  const [settings, setSettings] = useState({});
-  const [settingsAreSet, setSettingsAreSet] = useState(false);
+
+  const dispatch = useDispatch()
+
+  const settingsSetted = useSelector(state => state.settingsSetted);
+
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    axios(
-      '/api/settings',
-    )
-      .then(({ data }) => {
+    (async () => {
+      try {
+        const { data } = await axios.get('/api/settings');
         const resData = data.data.data;
         if (resData && resData.repoName
         && resData.buildCommand && resData.mainBranch && resData.period) {
-          setSettings({
+          dispatch(setSettings({
             repoName: resData.repoName,
             buildCommand: resData.buildCommand,
             mainBranch: resData.mainBranch,
             period: resData.period,
-          });
-          setSettingsAreSet(true);
-        } else {
-          setSettings({
-            repoName: '',
-            buildCommand: '',
-            mainBranch: '',
-            period: '',
-          });
+          }))
         }
         setIsLoaded(true);
-      })
-      .catch((e) => console.error(e));
+      } catch (e) {
+        console.error(e)
+      }
+    })();
   }, []);
 
   return (
     <div className="page">
       {isLoaded
-        && (
-        <Router>
-          <Switch>
-            <Route path="/settings">
-              <Settings
-                settings={settings}
-                setSettings={setSettings}
-                setSettingsAreSet={setSettingsAreSet}
-              />
-              <Footer />
-            </Route>
-            <Route path="/build/:id">
-              <Details settings={settings} />
-              <Footer />
-            </Route>
-            <Route>
-              {settingsAreSet ? <History settings={settings} /> : <Start />}
-              <Footer />
-            </Route>
-          </Switch>
-        </Router>
-        )}
+        && <Fragment>
+          <Router>
+            <Switch>
+              <Route path="/settings">
+                <Settings/>
+              </Route>
+              <Route path="/build/:id">
+                <Details/>
+              </Route>
+              <Route>
+                {settingsSetted ? <History/> : <Start/>}
+              </Route>
+            </Switch>
+          </Router>
+          <Footer/>
+        </Fragment>
+      }
     </div>
   );
 }

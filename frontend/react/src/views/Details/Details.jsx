@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { Link, useParams, useHistory } from 'react-router-dom';
 import axios from 'axios';
+import Header from '../../components/Header/Header';
 import Text from '../../components/Text/Text';
 import Button from '../../components/Button/Button';
 import Card from '../../components/Card/Card';
@@ -18,6 +19,7 @@ function Details(props) {
   const [logLoaded, setLogLoaded] = useState(false);
 
   useEffect(() => {
+    setBuildLoaded(false);
     axios(
       `/api/builds/${id}`,
     )
@@ -29,6 +31,7 @@ function Details(props) {
   }, [id]);
 
   useEffect(() => {
+    setLogLoaded(false);
     axios(
       `/api/builds/${id}/logs`,
     )
@@ -56,15 +59,15 @@ function Details(props) {
 
   return (
     <div className="content">
-      <div className="header">
-        <div className="header__container">
-          <div className="header__title">
-            <Text
-              class="text text_size_xl text_color_repo"
-              content={props.settings.repoName}
-            />
-          </div>
-          <div className="header__buttons">
+      <Header  
+        title = { 
+          <Text
+            class="text text_size_xl text_color_repo"
+            content={props.settings.repoName}
+          /> 
+        }
+        buttons = {
+          <Fragment>
             <Button
               onClick={reBuild}
               isIcon
@@ -76,14 +79,14 @@ function Details(props) {
             />
             <Link className="text_decoration_none" to="/settings">
               <Button
-                isIcon
-                buttonClasses="button button_primary button_size_s button_size_icon"
-                iconClasses="icon icon_size_s icon_margin_s icon_margin_s_with-text icon_margin_s_mobile_full icon_settings"
+                  isIcon
+                  buttonClasses="button button_primary button_size_s button_size_icon"
+                  iconClasses="icon icon_size_s icon_margin_s icon_margin_s_with-text icon_margin_s_mobile_full icon_settings"
               />
             </Link>
-          </div>
-        </div>
-      </div>
+          </Fragment>
+        }
+      />
       <div className="main">
         { buildLoaded
           && (

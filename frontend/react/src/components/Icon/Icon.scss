@@ -16,6 +16,11 @@
             width: 24px;
             height: 24px;
         }
+
+        &_xxxl {
+            width: 124px;
+            height: 124px;
+        }
     }
 
     &_margin_s {
@@ -32,6 +37,10 @@
                 }
             }
         }
+    }
+
+    &_start {
+        background: url('#{$static_path}/start.svg');
     }
 
     &_settings {

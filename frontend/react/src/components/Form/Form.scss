@@ -4,7 +4,12 @@
     max-width: 474px;
 
     &__group {
+        display: flex;
         margin-bottom: 18px;
+
+        &_column {
+            flex-direction: column;
+        }
     }
 
     &__label {
@@ -39,14 +44,6 @@
         height: 18px;
         letter-spacing: 0.06px;
         margin-bottom: 21px;
-    }
-
-    &__synchronize-block {
-        height: 60px;
-    }
-
-    &__github-repo {
-        height: 60px;
     }
 
     &__buttons {

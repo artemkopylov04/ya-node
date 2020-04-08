@@ -8,8 +8,8 @@ function Button({
   textClasses, iconClasses, buttonClasses,
   disabled, onClick,
 }) {
-  let text; let
-    icon;
+  let text,
+    icon, classes;
 
   if (isIcon) {
     icon = <Icon class={iconClasses} />;
@@ -20,22 +20,16 @@ function Button({
   }
 
   if (inputClasses) {
-    return (
-      <button
-        type="button"
-        disabled={disabled}
-        className={`${inputClasses} ${buttonClasses}`}
-        onClick={onClick}
-      >
-        {icon}
-        {text}
-      </button>
-    );
+    classes = `${inputClasses} ${buttonClasses}`;
+  } else {
+    classes = buttonClasses;
   }
+
   return (
     <button
       type="button"
-      className={buttonClasses}
+      disabled={disabled}
+      className={classes}
       onClick={onClick}
     >
       {icon}
