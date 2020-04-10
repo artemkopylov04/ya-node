@@ -1,31 +1,14 @@
 import React from 'react';
-import { format } from 'date-fns';
-import { ru } from 'date-fns/locale';
 import './Text.scss';
 
-function Text(props) {
-  const { content } = props;
-  const { duration } = props;
-  const { date } = props;
+function Text({
+  content, margin = '', size = 'm', color = 'common', additional = ''
+}) {
 
-  let text = content;
-
-  if (date) {
-    text = format(new Date(content), 'd MMM HH:mm', { locale: ru });
-  }
-
-  if (duration) {
-    const minutes = Math.floor(content / 1000) % 60;
-    if (content > (60 * 1000)) {
-      const hours = Math.floor(content / (60 * 1000));
-      text = `${hours} ч ${minutes} мин`;
-    } else {
-      text = `${minutes} мин`;
-    }
-  }
+  let marginClass = margin ? `text_margin_${margin}` : "";
 
   return (
-    <div className={props.class}>{text}</div>
+    <div className={`text text_size_${size} text_color_${color} ${marginClass} ${additional}`}>{content}</div>
   );
 }
 

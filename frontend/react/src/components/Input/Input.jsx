@@ -1,28 +1,14 @@
 import React from 'react';
 import MaskedInput from 'react-text-mask';
-import Button from '../Button/Button';
 import Icon from '../Icon/Icon';
 import './Input.scss';
 
 function Input({
-  type, disabled, inputClasses, textClasses,
-  buttonClasses, placeholder, content, handler,
+  type, inputClasses, 
+  placeholder, handler,
   model, iconClasses, clear
 }) {
-  console.log(model);
   switch (type) {
-    case 'submit':
-      return (
-        <Button
-          isText
-          disabled={disabled}
-          inputClasses={inputClasses}
-          buttonClasses={buttonClasses}
-          textClasses={textClasses}
-          content={content}
-          onClick={handler}
-        />
-      );
     case 'text':
       return (
         <div className="form__input">
@@ -35,7 +21,9 @@ function Input({
           />
           {(model && model.length) && 
             <Icon
-              class={iconClasses}
+              size="m"
+              content="icon_clear"
+              additional="form__input_clear-icon"
               handler={clear}
             />
           }
@@ -43,13 +31,15 @@ function Input({
       );
     case 'number':
       return (
-        <MaskedInput
-          className={inputClasses}
-          mask={[/[0-9]/, /[0-9]/]}
-          onChange={handler}
-          placeholder={placeholder}
-          value={model}
-        />
+        <div className="form__input">
+          <MaskedInput
+            className={inputClasses}
+            mask={[/[0-9]/, /[0-9]/]}
+            onChange={handler}
+            placeholder={placeholder}
+            value={model}
+          />
+        </div>
       );
     default:
   }

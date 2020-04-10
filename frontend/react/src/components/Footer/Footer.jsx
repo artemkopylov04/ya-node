@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from '../Button/Button';
+import Text from '../Text/Text';
 import './Footer.scss';
 
 function Footer() {
@@ -7,26 +8,35 @@ function Footer() {
     <div className="footer">
       <div className="footer__container">
         <div className="footer__menu">
-          <Button
-            isText
-            buttonClasses="footer__link button button_link button_size_s"
-            textClasses="text text_size_m"
-            content="Support"
-          />
-          <Button
-            isText
-            buttonClasses="footer__link button button_link button_size_s"
-            textClasses="text text_size_m"
-            content="Learning"
-          />
+          <div className="footer__link">
+            <Button
+              color="link"
+              size="s"
+              text={
+                <Text content="Support" />
+              }
+            />
+          </div>
+          <div className="footer__link">
+            <Button
+              color="link"
+              size="s"
+              text={
+                <Text content="Learning" />
+              }
+            />
+          </div>
         </div>
         <div className="footer__rights">
-          <Button
-            isText
-            buttonClasses="footer__link button button_link_disabled button_size_s"
-            textClasses="text text_size_m"
-            content="© 2020 Your Name"
-          />
+          <div className="footer__link">
+            <Button
+              color="link_disabled"
+              size="s"
+              text={
+                <Text content="© 2020 Your Name" />
+              }
+            />
+          </div>
         </div>
       </div>
     </div>

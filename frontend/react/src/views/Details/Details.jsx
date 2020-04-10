@@ -1,15 +1,19 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { Link, useParams, useHistory } from 'react-router-dom';
-import axios from 'axios';
+import { useSelector, useDispatch } from 'react-redux';
+import { getLog, getBuild, reBuild } from '../../store/actions';
 import Header from '../../components/Header/Header';
 import Text from '../../components/Text/Text';
 import Button from '../../components/Button/Button';
+import Icon from '../../components/Icon/Icon';
 import Card from '../../components/Card/Card';
 import Log from '../../components/Log/Log';
 import './Details.scss';
 
-function Details(props) {
+function Details() {
+  const dispatch = useDispatch();
   const history = useHistory();
+  const settings = useSelector(state => state.settings);
 
   const { id } = useParams();
 
@@ -20,68 +24,55 @@ function Details(props) {
 
   useEffect(() => {
     setBuildLoaded(false);
-    axios(
-      `/api/builds/${id}`,
-    )
-      .then((res) => {
-        setBuild(res.data.data.data);
-        setBuildLoaded(true);
-      })
-      .catch((e) => console.error(e));
-  }, [id]);
+    dispatch(getBuild(id, setBuild, () => setBuildLoaded(true)))
 
-  useEffect(() => {
     setLogLoaded(false);
-    axios(
-      `/api/builds/${id}/logs`,
-    )
-      .then((res) => {
-        setLog(res.data);
-        if (res.data.length > 0) {
-          setLogLoaded(true);
-        }
-      })
-      .catch((e) => console.error(e));
-  }, [id]);
+    dispatch(getLog(id, setLog, () => setLogLoaded(true)))
+    
+  }, [id, dispatch]);
 
-  const reBuild = () => {
-    axios.post(
-      `/api/builds/${build.commitHash}`,
-    )
-      .then(({ data }) => {
-        if (data && data.data && data.data.id) {
-          setLogLoaded(false);
-          history.push(`/build/${data.data.id}`);
-        }
-      })
-      .catch((e) => console.error(e));
-  };
+  const onReBuild = () => dispatch(reBuild(
+    build, 
+    (id) => history.push(`/build/${id}`), 
+    setLogLoaded));
 
   return (
     <div className="content">
       <Header  
         title = { 
           <Text
-            class="text text_size_xl text_color_repo"
-            content={props.settings.repoName}
+            size="xl"
+            color="repo"
+            content={settings.repoName}
           /> 
         }
         buttons = {
           <Fragment>
             <Button
-              onClick={reBuild}
-              isIcon
-              isText
-              buttonClasses="button button_primary button_size_s button_size_text-with-icon"
-              textClasses="text text_size_m text_margin_s text_margin_s_with-icon text_mobile_hidden"
-              iconClasses="icon icon_size_s icon_margin_s icon_margin_s_with-text icon_margin_s_mobile_full icon_rebuild"
-              content="Rebuild"
+              color="primary"
+              size="s"
+              additional="button_size_text-with-icon"
+              text={
+                <Text content="Rebuild" margin="s" additional="text_margin_s_with-icon text_mobile_hidden" />
+              }
+              icon = {
+                <Icon 
+                content="icon_rebuild" 
+                size="s" 
+                additional="icon_margin_s icon_margin_s_with-text icon_margin_s_mobile_full" />
+              }
+              onClick={onReBuild}
             />
             <Link className="text_decoration_none" to="/settings">
               <Button
-                  isIcon
-                  buttonClasses="button button_primary button_size_s button_size_icon"
-                  iconClasses="icon icon_size_s icon_margin_s icon_margin_s_with-text icon_margin_s_mobile_full icon_settings"
+                color="primary"
+                size="s"
+                icon = {
+                  <Icon 
+                  content="icon_settings" 
+                  size="s" 
+                  additional="icon_margin_s icon_margin_s_with-text icon_margin_s_mobile_full" />
+                }
               />
             </Link>
           </Fragment>

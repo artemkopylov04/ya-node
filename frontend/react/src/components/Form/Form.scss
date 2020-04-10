@@ -10,6 +10,10 @@
         &_column {
             flex-direction: column;
         }
+
+        &_inline {
+            align-items: center;
+        }
     }
 
     &__label {

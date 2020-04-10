@@ -1,9 +1,9 @@
 import React from 'react';
 import './Icon.scss';
 
-function Icon(props) {
+function Icon({size, content, additional, handler}) {
   return (
-    <div className={props.class} onClick={props.handler} />
+    <div className={`icon icon_size_${size} ${content} ${additional}`} onClick={handler} />
   );
 }
 

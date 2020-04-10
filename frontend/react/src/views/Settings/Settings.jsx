@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import axios from 'axios';
-import { setSettings } from '../../store/actions';
+import { setNewSettings } from '../../store/actions';
 import Header from '../../components/Header/Header';
 import Text from '../../components/Text/Text';
 import Form from '../../components/Form/Form';
@@ -20,6 +19,12 @@ function Settings() {
   const [mainBranch, setMainBranch] = useState(settings.mainBranch || '')
   const [period, setPeriod] = useState(settings.period || '')
 
+  const [error, setError] = useState('');
+  const [errorStatus, setErrorStatus] = useState(false);
+
+  const [repoError, setRepoError] = useState('');
+  const [commandError, setCommandError] = useState('');
+
   const components = [
     {
       title: 'GitHub repository',
@@ -27,10 +32,11 @@ function Settings() {
       state: repoName,
       style: 'column',
       type: 'text',
+      error: repoError,
       placeholder: 'user-name/repo-name',
       clearHandler() { setRepoName('') },
       onChangeHandler(event) {
-        if (event.target.value.length > 0) setRepoName('');
+        if (event.target.value.length > 0) setRepoError('');
         setRepoName(event.target.value);
       }
     },
@@ -40,10 +46,11 @@ function Settings() {
       state: buildCommand,
       style: 'column',
       type: 'text',
+      error: commandError,
       placeholder: 'npm run build',
       clearHandler: () => setBuildCommand(''),
       onChangeHandler: (event) => {
-        if (event.target.value.length > 0) setBuildCommand('');
+        if (event.target.value.length > 0) setCommandError('');
         setBuildCommand(event.target.value);
       }
     },
@@ -68,13 +75,8 @@ function Settings() {
     },
   ];
 
-  const [errorText, setErrorText] = useState('');
-  const [errorStatus, setErrorStatus] = useState(false);
-
-  const [repoValidationError, setRepoError] = useState('');
-  const [commandValidationError, setCommandError] = useState('');
-
-  const handleSubmit = async () => {
+  // с колбэком от формы
+  const handleSubmit = (cb) => {
     let error;
     if (repoName.length === 0) {
       error = true;
@@ -85,42 +87,28 @@ function Settings() {
       setCommandError('input_error');
     }
     if (error === undefined) {
-      try {
-        await axios({
-          method: 'POST',
-          url: '/api/settings',
-          data: {
-            repoName,
-            buildCommand,
-            mainBranch,
-            period: parseInt(period, 10),
-          },
-        });
-
-        dispatch(setSettings({
+      dispatch(
+        setNewSettings({
           repoName,
           buildCommand,
           mainBranch,
-          period,
-        }));
-
-        history.push('/');
-      } catch(e) {
-        setErrorStatus(true);
-        setErrorText('Непредвиденная ошибка');
-        setTimeout(() => setErrorStatus(false), 5000);
-        console.error(e);
-      }
-    }
+          period
+        }, 
+        () => history.push('/'),
+        {
+          status: setErrorStatus,
+          text: setError,
+        }, cb));
+    } else {cb();}
   };
 
-  const handleCancel = () => history.push('/');
+  const handleCancel = () => history.go(-1);
 
   return (
     <div className="content">
       <Header 
         title = {
-          <Text class="text text_size_xl text_color_title" content="School CI server" />
+          <Text size="xl" color="title" content="School CI server" />
         }
       />
       <div className="main">
@@ -133,9 +121,11 @@ function Settings() {
               submit: handleSubmit,
               cancel: handleCancel
             }}
+            submitText='Save'
+            cancelText='Cancel'
             error={{
-              text: '',
-              status: false,
+              text: error,
+              status: errorStatus,
             }}
           />
         </div>
