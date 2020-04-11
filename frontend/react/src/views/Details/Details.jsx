@@ -24,17 +24,32 @@ function Details() {
 
   useEffect(() => {
     setBuildLoaded(false);
-    dispatch(getBuild(id, setBuild, () => setBuildLoaded(true)))
+    dispatch(getBuild(id))
+      .then((res) => {
+        setBuild(res.data.data.data);
+        setBuildLoaded(true);
+      })
+      .catch((e) => console.error(e));
 
     setLogLoaded(false);
-    dispatch(getLog(id, setLog, () => setLogLoaded(true)))
-    
+    dispatch(getLog(id))
+      .then((res) => {
+        setLog(res.data);
+        if (res.data.length > 0) {
+          setLogLoaded(true);
+        }
+      })
+      .catch((e) => console.error(e));
   }, [id, dispatch]);
 
-  const onReBuild = () => dispatch(reBuild(
-    build, 
-    (id) => history.push(`/build/${id}`), 
-    setLogLoaded));
+  const onReBuild = () => dispatch(reBuild(build.commitHash))
+    .then(({ data }) => {
+      if (data && data.data && data.data.id) {
+        setLogLoaded(false);
+        history.push(`/build/${data.data.id}`);
+      }
+    })
+    .catch((e) => console.error(e)); 
 
   return (
     <div className="content">

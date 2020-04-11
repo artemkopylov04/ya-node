@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { setNewSettings } from '../../store/actions';
+import { setSettings, setNewSettings } from '../../store/actions';
 import Header from '../../components/Header/Header';
 import Text from '../../components/Text/Text';
 import Form from '../../components/Form/Form';
@@ -76,7 +76,7 @@ function Settings() {
   ];
 
   // с колбэком от формы
-  const handleSubmit = (cb) => {
+  const handleSubmit = (buttonsAbleCallback) => {
     let error;
     if (repoName.length === 0) {
       error = true;
@@ -93,13 +93,25 @@ function Settings() {
           buildCommand,
           mainBranch,
           period
-        }, 
-        () => history.push('/'),
-        {
-          status: setErrorStatus,
-          text: setError,
-        }, cb));
-    } else {cb();}
+        }))
+        .then(() => {
+          dispatch(setSettings({
+            repoName: settings.repoName,
+            buildCommand: settings.buildCommand,
+            mainBranch: settings.mainBranch,
+            period: settings.period,
+          }));
+  
+          history.push('/');
+        })
+        .catch((e) => {
+          buttonsAbleCallback();
+          setErrorStatus(true);
+          setError('Непредвиденная ошибка');
+          setTimeout(() => setErrorStatus(false), 5000);
+          console.error(e);
+        })
+    } else buttonsAbleCallback();
   };
 
   const handleCancel = () => history.go(-1);

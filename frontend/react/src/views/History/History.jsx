@@ -10,7 +10,6 @@ import Popup from '../../components/Popup/Popup';
 import './History.scss';
 import { runBuild, getBuilds } from '../../store/actions';
 
-
 function History() {
   const history = useHistory();
   const dispatch = useDispatch();
@@ -46,20 +45,40 @@ function History() {
     }
   ]
 
-  const handleSubmit = (cb) => {
+  const handleSubmit = (buttonsAbleCallback) => {
     if (hash.length === 0) {
       setHashError('input_error');
-      cb();
+      buttonsAbleCallback();
     } else {
-      dispatch(runBuild(hash, openBuild, {
-        status: setErrorStatus,
-        text: setError,
-      }, cb));
+      dispatch(runBuild(hash))
+        .then(({ data }) => {
+          buttonsAbleCallback();
+          if (data && data.data && data.data.id) {
+            openBuild(data.data.id);
+          }
+        })
+        .catch((e) => {
+          buttonsAbleCallback();
+          setErrorStatus(true);
+          setError('Непредвиденная ошибка');
+          setTimeout(() => setErrorStatus(false), 5000);
+          console.error(e);
+        });
     }
   };
 
   useEffect(() => {
-    dispatch(getBuilds(offset, builds, setShowMore, setBuilds, setIsLoaded))
+    dispatch(getBuilds(offset))
+      .then((res) => {
+        if (res.data.data.data.length === 10) {
+            setShowMore(true);
+        } else {
+            setShowMore(false);
+        }
+        setBuilds([...builds, ...res.data.data.data]);
+        setIsLoaded(true);
+      })
+      .catch((e) => console.error(e));
   }, [offset, dispatch]);
 
   const showMoreHandler = () => {
@@ -73,7 +92,7 @@ function History() {
   const closePopup = () => {
     setPopupIsOpen(false);
   };
-
+  
   const openBuild = (id) => history.push(`/build/${id}`);
 
   return (

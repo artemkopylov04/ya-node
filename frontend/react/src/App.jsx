@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import './App.scss';
-import { getSettings } from './store/actions';
+import { getSettings, setSettings } from './store/actions';
 
 import Start from './views/Start/Start';
 import Settings from './views/Settings/Settings';
@@ -20,7 +20,18 @@ function App() {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    dispatch(getSettings(setIsLoaded));
+    dispatch(getSettings())
+      .then((res) => {
+          const data = res.data.data.data;
+          dispatch(setSettings({
+              repoName: data.repoName,
+              buildCommand: data.buildCommand,
+              mainBranch: data.mainBranch,
+              period: data.period,
+          }));
+      })
+      .catch((e) => console.error(e))
+      .finally(() => setIsLoaded(true));
   }, [dispatch]);
 
   return (
