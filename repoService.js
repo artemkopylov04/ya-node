@@ -7,57 +7,52 @@ const fs = require('fs');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 
-const { checkRepo } = require('./helpers/checkRepo');
 const { getInfo } = require('./helpers/getInfoAboutCommit');
-const { instance, authHeader } = require('./helpers/request');
+const { getSettings, postRequest, existsRepository } = require('./api/requests');
+
+const { REPO_PATH, GIT_URL } = process.env;
 
 const app = express();
 
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 
-app.post('/add', async (req, res) => {
-  const { commitHash } = req.body;
-
+app.post('/add', async (req, res, next) => {
   try {
-    const info = await getInfo(commitHash, process.env.repo);
+    const info = await getInfo(req.body.commitHash, process.env.repo);
 
     if (!info) throw new Error('not info');
-    const build = await instance({
-      method: 'post',
-      url: `${process.env.API_URL}/build/request`,
-      data: {
-        commitHash,
-        commitMessage: info.message,
-        branchName: info.branch,
-        authorName: info.author,
-      },
-      headers: authHeader,
-    });
+
+    const build = await postRequest(req.body.commitHash, info);
 
     res.json(build.data);
-  } catch (e) {
-    console.error('add error');
-    res.sendStatus(500);
-  }
+  } catch (e) { next('add'); }
 });
 
-app.post('/check', async (req, res) => {
+app.post('/clone', async (req, res, next) => {
   const { repoName, mainBranch } = req.body;
 
-  const code = await checkRepo(mainBranch, repoName);
+  try {
+    await existsRepository(GIT_URL, repoName);
+  } catch (e) { next('repository exists'); }
 
-  res.sendStatus(code ? 500 : 200);
-});
+  try {
+    fs.rmdirSync(process.env.REPO_PATH, { recursive: true });
+    fs.mkdirSync(process.env.REPO_PATH);
+  } catch (e) { next('delete local repository'); }
 
-app.delete('/destroy', (req, res) => {
-  // Node 12.10
-  fs.rmdirSync(process.env.REPO_PATH, { recursive: true });
-  fs.mkdirSync(process.env.REPO_PATH);
-  res.sendStatus(200);
+  try {
+    await exec(`git clone ${GIT_URL}/${repoName}.git ${REPO_PATH}/${repoName}`);
+    await exec(`git show-branch --sha1-name ${mainBranch.toString()}`, {
+      cwd: `${REPO_PATH}/${repoName}`,
+    });
+    process.env.repo = repoName;
+    res.sendStatus(200);
+  } catch (e) { next('clone repository'); }
 });
 
 app.use((err, req, res) => {
+  console.error(err);
   res.sendStatus(500);
 });
 
@@ -67,15 +62,11 @@ app.listen(process.env.REPO_PORT, () => {
 
 // Пул изменений + добавление в process.env настроек
 (async function pullRepo() {
-  const settings = await instance({
-    method: 'get',
-    url: `${process.env.API_URL}/conf`,
-    headers: authHeader,
-  });
+  const { data } = await getSettings();
 
-  if (settings.data && settings.data.data && settings.data.data.period) {
-    process.env.repo = settings.data.data.repoName;
-    process.env.period = settings.data.data.period;
+  if (data && data.data && data.data.period) {
+    process.env.repo = data.data.repoName;
+    process.env.period = data.data.period;
   }
 
   try {
@@ -85,7 +76,7 @@ app.listen(process.env.REPO_PORT, () => {
     console.log(`Process pull: ${pulled.stdout}`);
     console.log(`Next pull : ${process.env.period} minutes`);
   } catch (e) {
-    console.error('pull error');
+    console.error('pull');
   }
 
   setTimeout(() => {

@@ -27,6 +27,8 @@ function History() {
 
   const [error, setError] = useState('');
   const [errorStatus, setErrorStatus] = useState(false);
+  
+  const openBuild = (id) => history.push(`/build/${id}`);
 
   const components = [
     {
@@ -53,8 +55,8 @@ function History() {
       dispatch(runBuild(hash))
         .then(({ data }) => {
           buttonsAbleCallback();
-          if (data && data.data && data.data.id) {
-            openBuild(data.data.id);
+          if (data && data.data && data.data.data) {
+            openBuild(data.data.data.id);
           }
         })
         .catch((e) => {
@@ -92,8 +94,6 @@ function History() {
   const closePopup = () => {
     setPopupIsOpen(false);
   };
-  
-  const openBuild = (id) => history.push(`/build/${id}`);
 
   return (
     <div className="content">

@@ -1,4 +1,4 @@
 node_modules
-ecosystem.config.js
+getEnvs.js
 rep/
 test.js
