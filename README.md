@@ -70,11 +70,8 @@ npm test
 npm i -g pm2
 ```
 
-Далее делаем из ecosystem.config.js.example -> ecosystem.config.js, подставляя туда доступы и делаем:
-
-```
-pm2 start ecosystem.config.js
-```
+Для переменных окружения есть файл getEnvs.js.example
+Туда вбиваем секреты. Он импортируется в конфиг pm2
 
 Есть PostMan конфиг в папке postman
 
