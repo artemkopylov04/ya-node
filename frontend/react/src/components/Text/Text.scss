@@ -1,6 +1,9 @@
 @import '../../scss/vars';
 
 .text {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    
     &_size {
         &_m {
             font-size: 13px;

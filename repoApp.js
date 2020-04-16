@@ -30,7 +30,7 @@ app.post('/add', async (req, res, next) => {
 });
 
 app.post('/clone', async (req, res, next) => {
-  const { repoName, mainBranch } = req.body;
+  const { repoName } = req.body;
 
   try {
     await existsRepository(GIT_URL, repoName);
@@ -43,21 +43,14 @@ app.post('/clone', async (req, res, next) => {
 
   try {
     await exec(`git clone ${GIT_URL}/${repoName}.git ${REPO_PATH}/${repoName}`);
-    await exec(`git show-branch --sha1-name ${mainBranch.toString()}`, {
-      cwd: `${REPO_PATH}/${repoName}`,
-    });
     process.env.repo = repoName;
     res.sendStatus(200);
-  } catch (e) { next('clone repository'); }
+  } catch (e) { console.error(e); next('clone repository'); }
 });
 
 app.use((err, req, res) => {
   console.error(err);
   res.sendStatus(500);
-});
-
-app.listen(process.env.REPO_PORT, () => {
-  console.log(`Listen ${process.env.REPO_PORT}`);
 });
 
 // Пул изменений + добавление в process.env настроек
@@ -66,20 +59,23 @@ app.listen(process.env.REPO_PORT, () => {
 
   if (data && data.data && data.data.period) {
     process.env.repo = data.data.repoName;
-    process.env.period = data.data.period;
-  }
+    process.env.period = data.data.period || 10;
 
-  try {
-    const pulled = await exec('git pull', {
-      cwd: `${process.env.REPO_PATH}/${process.env.repo}`,
-    });
-    console.log(`Process pull: ${pulled.stdout}`);
-    console.log(`Next pull : ${process.env.period} minutes`);
-  } catch (e) {
-    console.error('pull');
+    try {
+      const pulled = await exec('git pull', {
+        cwd: `${process.env.REPO_PATH}/${process.env.repo}`,
+      });
+      console.log(`Process pull: ${pulled.stdout}`);
+      console.log(`Next pull : ${process.env.period} minutes`);
+    } catch (e) {
+      console.error(e);
+      console.error('pull');
+    }
   }
 
   setTimeout(() => {
     pullRepo();
-  }, process.env.period * 60 * 1000);
+  }, process.env.period || 10 * 60 * 1000);
 }());
+
+module.exports = app;
