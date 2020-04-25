@@ -1,7 +1,7 @@
 import React from 'react';
 
 export interface onClick {
-    (event: React.MouseEvent<HTMLElement>): any
+    (event: React.MouseEvent<HTMLElement>): void
 }
 
 export interface Build {

@@ -1,10 +1,10 @@
 // Приложение отвечающее за работу с репозиторием
 
-const express = require('express');
-const bodyParser = require('body-parser');
-const morgan = require('morgan');
-const fs = require('fs');
-const util = require('util');
+import express from 'express';
+import bodyParser from 'body-parser';
+import morgan from 'morgan';
+import fs from 'fs';
+import util from 'util';
 const exec = util.promisify(require('child_process').exec);
 
 const { getInfo } = require('./helpers/getInfoAboutCommit');
@@ -37,8 +37,12 @@ app.post('/clone', async (req, res, next) => {
   } catch (e) { next('repository exists'); }
 
   try {
-    fs.rmdirSync(process.env.REPO_PATH, { recursive: true });
-    fs.mkdirSync(process.env.REPO_PATH);
+    if (process.env.REPO_PATH) {
+      fs.rmdirSync(process.env.REPO_PATH, { recursive: true });
+      fs.mkdirSync(process.env.REPO_PATH);
+    } else {
+      console.error('REPO path not set');
+    }
   } catch (e) { next('delete local repository'); }
 
   try {
@@ -48,7 +52,7 @@ app.post('/clone', async (req, res, next) => {
   } catch (e) { console.error(e); next('clone repository'); }
 });
 
-app.use((err, req, res) => {
+app.use((err: string, req: express.Request, res: express.Response) => {
   console.error(err);
   res.sendStatus(500);
 });
@@ -75,7 +79,7 @@ app.use((err, req, res) => {
 
   setTimeout(() => {
     pullRepo();
-  }, process.env.period || 10 * 60 * 1000);
+  }, Number(process.env.period) || 10 * 60 * 1000);
 }());
 
 module.exports = app;

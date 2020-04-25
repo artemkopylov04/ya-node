@@ -5,6 +5,10 @@ import Date from '../Date/Date';
 import Icon from '../Icon/Icon';
 import './Card.scss';
 
+interface onClick {
+  (source: string, subString: string): boolean;
+}
+
 export interface Card {
   id?: string,
   extended?: boolean,

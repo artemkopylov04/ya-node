@@ -1,7 +1,7 @@
-const util = require('util');
+import util from 'util';
 const exec = util.promisify(require('child_process').exec);
 
-async function getInfo(commitHash, repoName) {
+async function getInfo(commitHash: string, repoName: string) {
   try {
     const author = await exec(`git log --format=%an -n 1 ${commitHash}`, {
       cwd: `${process.env.REPO_PATH}/${repoName}`,

@@ -53,7 +53,7 @@ function History() {
   const handleSubmit = async () => {
     if (hash.length === 0) {
       setHashError('input_error');
-      setFormButtonsToStatusDisabled(false);
+      dispatch(setFormButtonsToStatusDisabled(false));
     } else {
       try {
         const { data }: any = await dispatch(runBuild(hash));
@@ -66,7 +66,7 @@ function History() {
         setTimeout(() => setErrorStatus(false), 5000);
         console.error(e);
       } finally {
-        setFormButtonsToStatusDisabled(false);
+        dispatch(setFormButtonsToStatusDisabled(false));
       }
     }
   };

@@ -1,13 +1,13 @@
 // Приложение отвечающее за билд
-const {
+import {
   getBuilds,
   postRequestStart,
   postRequestFinish,
-} = require('./api/requests');
+} from './api/requests';
 
 function builder() {
-  getBuilds(10, 0)
-    .then((builds) => {
+  getBuilds({ limit: 10, offset: 0 })
+    .then((builds: any) => {
       if (builds.data.data.length === 0) console.log('empty builds');
       for (let i = builds.data.data.length - 1; i >= 0; i -= 1) {
         const build = builds.data.data[i];

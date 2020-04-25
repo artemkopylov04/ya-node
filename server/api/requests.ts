@@ -1,6 +1,13 @@
 const https = require('https');
 const axios = require('axios');
 
+interface Settings {
+  repoName: string,
+  buildCommand: string,
+  mainBranch: string,
+  period: number,
+}
+
 const {
   REPO_URL, API_URL, REPO_PORT, TOKEN,
 } = process.env;
@@ -27,19 +34,19 @@ const getBuilds = ({ limit = 10, offset = 0 }) => instance({
   headers: authHeader,
 });
 
-const getBuild = ({ buildId }) => instance({
+const getBuild = ({ buildId }: { buildId?: string }) => instance({
   method: 'get',
   url: `${API_URL}/build/details?buildId=${buildId}`,
   headers: authHeader,
 });
 
-const getBuildLog = ({ buildId }) => instance({
+const getBuildLog = ({ buildId }: { buildId?: string }) => instance({
   method: 'get',
   url: `${API_URL}/build/log?buildId=${buildId}`,
   headers: authHeader,
 });
 
-const postHash = ({ commitHash }) => instance({
+const postHash = ({ commitHash }: { commitHash?: string }) => instance({
   method: 'post',
   url: `${REPO_URL}:${REPO_PORT}/add`,
   data: {
@@ -49,7 +56,7 @@ const postHash = ({ commitHash }) => instance({
 
 const postSettings = ({
   repoName, buildCommand, mainBranch, period,
-}) => instance({
+}: Settings) => instance({
   method: 'post',
   url: `${API_URL}/conf`,
   data: {
@@ -63,7 +70,7 @@ const postSettings = ({
 
 const postRepository = ({
   repoName, mainBranch,
-}) => instance({
+}: { repoName: string, mainBranch: string }) => instance({
   method: 'post',
   url: `${REPO_URL}:${REPO_PORT}/clone`,
   data: {
@@ -72,7 +79,12 @@ const postRepository = ({
   },
 });
 
-const postRequest = (commitHash, { message, branch, author }) => instance({
+const postRequest = (
+  commitHash: string, {
+     message, 
+     branch,
+     author 
+    }: { message: string, branch: string, author: string }) => instance({
   method: 'post',
   url: `${API_URL}/build/request`,
   data: {
@@ -84,7 +96,7 @@ const postRequest = (commitHash, { message, branch, author }) => instance({
   headers: authHeader,
 });
 
-const postRequestStart = ({ id }) => instance({
+const postRequestStart = ({ id }: { id: string }) => instance({
   method: 'post',
   url: `${API_URL}/build/start`,
   data: {
@@ -94,7 +106,7 @@ const postRequestStart = ({ id }) => instance({
   headers: authHeader,
 });
 
-const postRequestFinish = ({ id }, duration) => instance({
+const postRequestFinish = ({ id }: { id: string }, duration: number) => instance({
   method: 'post',
   url: `${process.env.API_URL}/build/finish`,
   data: {
@@ -112,12 +124,12 @@ const deleteSettings = () => instance({
   headers: authHeader,
 });
 
-const existsRepository = (GIT_URL, repoName) => instance({
+const existsRepository = (GIT_URL: string, repoName: string) => instance({
   method: 'get',
   url: `${GIT_URL}/${repoName}`,
 });
 
-module.exports = {
+export {
   getSettings,
   getBuilds,
   getBuild,

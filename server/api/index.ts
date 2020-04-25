@@ -1,7 +1,7 @@
-const express = require('express');
-const Convert = require('ansi-to-html');
+import express from 'express';
+import Convert from 'ansi-to-html';
 
-const {
+import {
   getSettings,
   getBuilds,
   getBuild,
@@ -10,7 +10,8 @@ const {
   postSettings,
   postRepository,
   postHash,
-} = require('./requests');
+} from './requests';
+import { AxiosResponse, AxiosError } from 'axios';
 
 const {
   getCache,
@@ -18,21 +19,21 @@ const {
 } = require('./apiHelpers');
 
 const router = express.Router();
-const convert = new Convert();
-const cacheLogs = {};
+const convert = new Convert({});
+const cacheLogs: any = {};
 
 // GET
 router.get('/settings', (req, res, next) => getSettings()
-  .then((response) => send(res, response))
+  .then((response: AxiosResponse) => send(res, response))
   .catch(() => next('get settings error')));
 
 router.get('/builds', (req, res, next) => getBuilds(req.query)
-  .then((response) => send(res, response))
+  .then((response: AxiosResponse) => send(res, response))
   .catch(() => next('get all builds error')));
 
 router.get('/builds/:buildId', (req, res, next) => getBuild(req.params)
-  .then((response) => send(res, response))
-  .catch((e) => (e.response.status === 400
+  .then((response: AxiosResponse) => send(res, response))
+  .catch((e: AxiosError) => (e.response && e.response.status === 400
     ? res.sendStatus(400)
     : next('get build error'))));
 
@@ -40,8 +41,8 @@ router.get('/builds/:buildId/logs', (req, res, next) => {
   const cache = getCache(req.params, cacheLogs);
 
   if (!cache) {
-    getBuildLog(req.params, cacheLogs)
-      .then(({ data }) => {
+    getBuildLog(req.params)
+      .then(({ data }: AxiosResponse) => {
         if (data.length > 0 && Object.keys(cacheLogs).length < 1000) {
           const log = convert.toHtml(data);
 
@@ -52,7 +53,7 @@ router.get('/builds/:buildId/logs', (req, res, next) => {
           res.send('');
         }
       })
-      .catch((e) => (e.response.status === 400
+      .catch((e: AxiosError) => (e.response && e.response.status === 400
         ? res.sendStatus(400)
         : next('get build error')));
   } else res.send(cache);
@@ -63,7 +64,7 @@ router.post('/settings', async (req, res, next) => {
   try {
     await deleteSettings();
     await postRepository(req.body);
-    const response = await postSettings(req.body);
+    const response: AxiosResponse = await postSettings(req.body);
     send(res, response);
   } catch (e) {
     next('post settings error');
@@ -71,7 +72,7 @@ router.post('/settings', async (req, res, next) => {
 });
 
 router.post('/builds/:commitHash', (req, res, next) => postHash(req.params)
-  .then((response) => send(res, response))
+  .then((response: AxiosResponse) => send(res, response))
   .catch(() => next('post hash error')));
 
-module.exports = router;
+export = router;
