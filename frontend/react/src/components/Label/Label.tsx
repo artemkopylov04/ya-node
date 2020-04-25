@@ -2,7 +2,12 @@ import React from 'react';
 import Text from '../Text/Text';
 import './Label.scss';
 
-function Label({title, required}) {
+interface Label {
+  title: string,
+  required: boolean,
+}
+
+const Label: React.FC<Label> = ({title, required}) => {
 
 return (
     <div className="form__label">

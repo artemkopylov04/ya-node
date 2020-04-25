@@ -3,11 +3,20 @@ import MaskedInput from 'react-text-mask';
 import Icon from '../Icon/Icon';
 import './Input.scss';
 
-function Input({
+interface Input {
+  type: string,
+  inputClasses: string,
+  placeholder: string,
+  model: string | number,
+  clear: any,
+  handler: any,
+}
+
+const Input: React.FC<Input> = ({
   type, inputClasses, 
   placeholder, handler,
-  model, iconClasses, clear
-}) {
+  model, clear
+}) => {
   switch (type) {
     case 'text':
       return (
@@ -19,7 +28,7 @@ function Input({
             value={model}
             onChange={handler}
           />
-          {(model && model.length) && 
+          {(model && typeof model === 'string') && 
             <Icon
               size="m"
               content="icon_clear"
@@ -42,6 +51,9 @@ function Input({
         </div>
       );
     default:
+      return (
+        <div></div>
+      )
   }
 }
 

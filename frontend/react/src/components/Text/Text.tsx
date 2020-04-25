@@ -1,9 +1,17 @@
 import React from 'react';
 import './Text.scss';
 
-function Text({
+export interface Text {
+  content: string,
+  margin?: string,
+  size?: string,
+  color?: string,
+  additional?: string,
+}
+
+const Text: React.FC<Text> = ({
   content, margin = '', size = 'm', color = 'common', additional = ''
-}) {
+}) => {
 
   let marginClass = margin ? `text_margin_${margin}` : "";
 

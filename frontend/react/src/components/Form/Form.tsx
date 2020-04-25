@@ -2,20 +2,23 @@ import React from 'react';
 import Text from '../Text/Text';
 import FormGroup from '../FormGroup/FormGroup';
 import './Form.scss';
-import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import Button from '../Button/Button';
 
-function Form({title, description, components, handlers, error, submitText, cancelText}) {
+import { Form as F, FormComponent } from '../../typings';
+import { setFormButtonsToStatusDisabled } from '../../store/actions';
+import { State } from '../../store/state';
 
-  const [disabled, setDisabled] = useState(false);
+const Form: React.FC<F> = ({title, description, components, handlers, error, submitText, cancelText}) => {
 
-  const onClick = (handler) => {
-    setDisabled(true);
-    handler(() => setDisabled(false));
+  const dispatch = useDispatch();
+  const disabled = useSelector<State, boolean>(state => state.formButtonsDisabled);
+
+  const onSubmit = () => {
+    dispatch(setFormButtonsToStatusDisabled(true));
+    handlers.submit();
   }
-
-  const onSubmit = () => onClick(handlers.submit);
-  const onCancel = () => onClick(handlers.cancel);
+  const onCancel = () => handlers.cancel();
 
   return (
     <div className="form">
@@ -26,7 +29,7 @@ function Form({title, description, components, handlers, error, submitText, canc
       <div className="form__description">
         <Text content={description} />
       </div> }
-      {components.map((component, index) => {
+      {components.map((component: FormComponent, index: number) => {
         return (
           <FormGroup
             key={index}
@@ -57,6 +60,7 @@ function Form({title, description, components, handlers, error, submitText, canc
         <Button
           disabled={disabled}
           color="success"
+          size="m"
           additional="form__btn_save"
           text={
             <Text content={submitText} margin="m" />
@@ -66,6 +70,7 @@ function Form({title, description, components, handlers, error, submitText, canc
         <Button
           disabled={disabled}
           color="primary"
+          size="m"
           additional="form__btn_cancel"
           text={
             <Text content={cancelText} margin="m" />

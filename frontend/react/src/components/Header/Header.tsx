@@ -1,7 +1,12 @@
 import React from 'react';
 import './Header.scss';
 
-function Header({title, buttons}) {
+interface Header {
+  title: React.ReactNode,
+  buttons?: React.ReactFragment
+}
+
+const Header: React.FC<Header> = ({title, buttons}) => {
   return (
     <div className="header">
         <div className="header__container">

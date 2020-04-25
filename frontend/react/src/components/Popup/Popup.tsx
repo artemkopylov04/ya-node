@@ -1,10 +1,19 @@
 import React from 'react';
 import Form from '../Form/Form';
 import './Popup.scss';
+import { FormComponent } from '../../typings';
 
-function Popup({
+interface Popup {
+  cancelHandler: any,
+  submitHandler: any,
+  error: string,
+  errorStatus: boolean,
+  components: FormComponent[],
+}
+
+const Popup: React.FC<Popup> = ({
   cancelHandler, submitHandler, error, errorStatus, components
-}) {
+}) => {
 
   return (
     <div className="popup__layout">

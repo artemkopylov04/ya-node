@@ -4,12 +4,31 @@ import Input from '../Input/Input';
 import Label from '../Label/Label';
 import './FormGroup.scss';
 
-function FormGroup({label, input, type, style = 'column'}) {
+export interface FormGroup {
+    label: {
+        title: string,
+        required: boolean,
+        before?: string,
+        after?: string,
+    }
+    input: {
+        type: string,
+        placeholder: string,
+        error?: string,
+        model: string | number,
+        changeHandler: any,
+        clearHandler: any,
+    },
+    type?: string,
+    style: string,
+}
+
+const FormGroup: React.FC<FormGroup> = ({label, input, style = 'column'}) => {
 
     return (
         <div className={`form__group form__group_${style}`}>
             {style === 'column' && <Label title={label.title} required={label.required} />}
-            {style === 'inline' && <Text content={label.before} />}
+            {style === 'inline' && <Text content={label.before || ''} />}
             <Input
                 type={input.type}
                 placeholder={input.placeholder}
@@ -18,7 +37,7 @@ function FormGroup({label, input, type, style = 'column'}) {
                 handler={input.changeHandler}
                 clear={input.clearHandler}
             />
-            {style === 'inline' && <Text content={label.after} />}
+            {style === 'inline' && <Text content={label.after || ''} />}
         </div>
     )
 }

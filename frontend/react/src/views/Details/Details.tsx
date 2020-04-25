@@ -1,7 +1,8 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useEffect, Fragment } from 'react';
 import { Link, useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { getLog, getBuild, reBuild } from '../../store/actions';
+import { getBuildDetails, reBuild,
+  setBuildLoading, setLogLoading } from '../../store/actions';
 import Header from '../../components/Header/Header';
 import Text from '../../components/Text/Text';
 import Button from '../../components/Button/Button';
@@ -10,46 +11,31 @@ import Card from '../../components/Card/Card';
 import Log from '../../components/Log/Log';
 import './Details.scss';
 
+import { State, Settings } from '../../store/state';
+
 function Details() {
   const dispatch = useDispatch();
   const history = useHistory();
-  const settings = useSelector(state => state.settings);
+  const settings = useSelector<State, Settings>(state => state.settings);
+  const build = useSelector<State, any>(state => state.activeBuild.buildCard);
+  const buildLoaded = useSelector<State, boolean>(state => state.activeBuild.buildCardLoaded);
+  const log = useSelector<State, string>(state => state.activeBuild.buildLog);
+  const logLoaded = useSelector<State, boolean>(state => state.activeBuild.buildLogLoaded);
 
   const { id } = useParams();
 
-  const [build, setBuild] = useState({});
-  const [buildLoaded, setBuildLoaded] = useState(false);
-  const [log, setLog] = useState('');
-  const [logLoaded, setLogLoaded] = useState(false);
-
   useEffect(() => {
-    setBuildLoaded(false);
-    dispatch(getBuild(id))
-      .then((res) => {
-        setBuild(res.data.data.data);
-        setBuildLoaded(true);
-      })
-      .catch((e) => console.error(e));
+    dispatch(getBuildDetails(id || ''))
+  }, [id]);
 
-    setLogLoaded(false);
-    dispatch(getLog(id))
-      .then((res) => {
-        setLog(res.data);
-        if (res.data.length > 0) {
-          setLogLoaded(true);
-        }
-      })
-      .catch((e) => console.error(e));
-  }, [id, dispatch]);
-
-  const onReBuild = () => dispatch(reBuild(build.commitHash))
-    .then(({ data }) => {
-      if (data && data.data && data.data.id) {
-        setLogLoaded(false);
-        history.push(`/build/${data.data.id}`);
-      }
-    })
-    .catch((e) => console.error(e)); 
+  const onReBuild = async () => {
+    try {
+      const { data }: any = await dispatch(reBuild(build.commitHash));
+      history.push(`/build/${data.data.data.id}`);
+    } catch(e) {
+      console.error(e)
+    }
+  }
 
   return (
     <div className="content">
@@ -63,6 +49,7 @@ function Details() {
         }
         buttons = {
           <Fragment>
+            { buildLoaded &&
             <Button
               color="primary"
               size="s"
@@ -78,6 +65,7 @@ function Details() {
               }
               onClick={onReBuild}
             />
+            }
             <Link className="text_decoration_none" to="/settings">
               <Button
                 color="primary"

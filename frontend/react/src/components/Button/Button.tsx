@@ -1,10 +1,21 @@
 import React from 'react';
 import './Button.scss';
+import { onClick } from '../../typings/index';
 
-function Button({
+export interface Button {
+  disabled?: boolean,
+  onClick?: onClick,
+  additional?: string,
+  icon?: React.ReactNode,
+  text?: React.ReactNode,
+  color: string,
+  size: string,
+}
+
+const Button: React.FC<Button> = ({
   disabled, onClick, additional,
   icon, text, color, size = "m"
-}) {
+}) => {
 
   return (
     <button

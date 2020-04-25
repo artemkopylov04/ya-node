@@ -1,18 +1,22 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { setSettings, setNewSettings } from '../../store/actions';
+import { setSettings, setNewSettings, setFormButtonsToStatusDisabled } from '../../store/actions';
 import Header from '../../components/Header/Header';
 import Text from '../../components/Text/Text';
 import Form from '../../components/Form/Form';
 import './Settings.scss';
+
+import { State, Settings as SettingsI } from '../../store/state'; 
+
+import { FormComponent } from '../../typings';
 
 function Settings() {
 
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const settings = useSelector(state => state.settings);
+  const settings = useSelector<State, SettingsI>(state => state.settings);
 
   const [repoName, setRepoName] = useState(settings.repoName || '')
   const [buildCommand, setBuildCommand] = useState(settings.buildCommand || '')
@@ -25,7 +29,7 @@ function Settings() {
   const [repoError, setRepoError] = useState('');
   const [commandError, setCommandError] = useState('');
 
-  const components = [
+  const components: FormComponent[] = [
     {
       title: 'GitHub repository',
       required: true,
@@ -35,9 +39,9 @@ function Settings() {
       error: repoError,
       placeholder: 'user-name/repo-name',
       clearHandler() { setRepoName('') },
-      onChangeHandler(event) {
-        if (event.target.value.length > 0) setRepoError('');
-        setRepoName(event.target.value);
+      onChangeHandler(event: React.FormEvent<HTMLInputElement>) {
+        if (event.currentTarget.value.length > 0) setRepoError('');
+        setRepoName(event.currentTarget.value);
       }
     },
     {
@@ -49,9 +53,9 @@ function Settings() {
       error: commandError,
       placeholder: 'npm run build',
       clearHandler: () => setBuildCommand(''),
-      onChangeHandler: (event) => {
-        if (event.target.value.length > 0) setCommandError('');
-        setBuildCommand(event.target.value);
+      onChangeHandler: (event: React.FormEvent<HTMLInputElement>) => {
+        if (event.currentTarget.value.length > 0) setCommandError('');
+        setBuildCommand(event.currentTarget.value);
       }
     },
     {
@@ -62,21 +66,25 @@ function Settings() {
       type: 'text',
       placeholder: 'master',
       clearHandler: () => setMainBranch(''),
-      onChangeHandler: (event) => setMainBranch(event.target.value),
+      onChangeHandler: (event: React.FormEvent<HTMLInputElement>) =>
+        setMainBranch(event.currentTarget.value),
     },
     {
+      title: '',
       state: period,
+      required: false,
       style: 'inline',
       type: 'number',
       before: 'Synchronize every',
       after: 'minutes',
       placeholder: '15',
-      onChangeHandler: (event) => setPeriod(event.target.value),
+      onChangeHandler: (event: React.FormEvent<HTMLInputElement>) => 
+        setPeriod(event.currentTarget.value),
     },
   ];
 
   // с колбэком от формы
-  const handleSubmit = (buttonsAbleCallback) => {
+  const handleSubmit = async () => {
     let error;
     if (repoName.length === 0) {
       error = true;
@@ -87,34 +95,40 @@ function Settings() {
       setCommandError('input_error');
     }
     if (error === undefined) {
-      dispatch(
-        setNewSettings({
-          repoName,
-          buildCommand,
-          mainBranch,
-          period
-        }))
-        .then(() => {
-          dispatch(setSettings({
+      try {
+        await dispatch(
+          setNewSettings({
             repoName,
             buildCommand,
             mainBranch,
-            period,
-        }));
+            period: Number(period)
+          }));
   
-          history.push('/');
-        })
-        .catch((e) => {
-          buttonsAbleCallback();
-          setErrorStatus(true);
-          setError('Непредвиденная ошибка');
-          setTimeout(() => setErrorStatus(false), 5000);
-          console.error(e);
-        })
-    } else buttonsAbleCallback();
+        dispatch(setSettings({
+          repoName,
+          buildCommand,
+          mainBranch,
+          period: Number(period)
+        }));
+    
+        history.push('/');
+      } catch(e) {
+        setErrorStatus(true);
+        setError('Непредвиденная ошибка');
+        setTimeout(() => setErrorStatus(false), 5000);
+        console.error(e);
+      } finally {
+        dispatch(setFormButtonsToStatusDisabled(false));
+      }
+    } else {
+      dispatch(setFormButtonsToStatusDisabled(false));
+    }
   };
 
-  const handleCancel = () => history.go(-1);
+  const handleCancel = () => {
+    history.go(-1);
+    dispatch(setFormButtonsToStatusDisabled(false));
+  }
 
   return (
     <div className="content">

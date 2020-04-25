@@ -8,16 +8,19 @@ import Button from '../../components/Button/Button';
 import Card from '../../components/Card/Card';
 import Popup from '../../components/Popup/Popup';
 import './History.scss';
-import { runBuild, getBuilds } from '../../store/actions';
+import { runBuild, getBuilds, setFormButtonsToStatusDisabled } from '../../store/actions';
+
+import { Build } from '../../typings';
+import { State, Settings } from '../../store/state';
 
 function History() {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const settings = useSelector(state => state.settings);
+  const settings = useSelector<State, Settings>(state => state.settings);
 
   const [popupIsOpen, setPopupIsOpen] = useState(false);
-  const [builds, setBuilds] = useState([]);
+  const [builds, setBuilds] = useState<Array<Build>>([]);
   const [offset, setOffset] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
   const [showMore, setShowMore] = useState(false);
@@ -28,7 +31,7 @@ function History() {
   const [error, setError] = useState('');
   const [errorStatus, setErrorStatus] = useState(false);
   
-  const openBuild = (id) => history.push(`/build/${id}`);
+  const openBuild = (id: string | number) => history.push(`/build/${id}`);
 
   const components = [
     {
@@ -40,48 +43,56 @@ function History() {
       error: hashError,
       placeholder: 'Commit hash',
       clearHandler() { setHash('') },
-      onChangeHandler(event) {
-        if (event.target.value.length > 0) setHashError('');
-        setHash(event.target.value);
+      onChangeHandler(event: React.FormEvent<HTMLInputElement>) {
+        if (event.currentTarget.value.length > 0) setHashError('');
+        setHash(event.currentTarget.value);
       }
     }
   ]
 
-  const handleSubmit = (buttonsAbleCallback) => {
+  const handleSubmit = async () => {
     if (hash.length === 0) {
       setHashError('input_error');
-      buttonsAbleCallback();
+      setFormButtonsToStatusDisabled(false);
     } else {
-      dispatch(runBuild(hash))
-        .then(({ data }) => {
-          buttonsAbleCallback();
-          if (data && data.data && data.data.data) {
-            openBuild(data.data.data.id);
-          }
-        })
-        .catch((e) => {
-          buttonsAbleCallback();
-          setErrorStatus(true);
-          setError('Непредвиденная ошибка');
-          setTimeout(() => setErrorStatus(false), 5000);
-          console.error(e);
-        });
+      try {
+        const { data }: any = await dispatch(runBuild(hash));
+        if (data && data.data && data.data.data) {
+          openBuild(data.data.data.id);
+        }
+      } catch (e) {
+        setErrorStatus(true);
+        setError('Непредвиденная ошибка');
+        setTimeout(() => setErrorStatus(false), 5000);
+        console.error(e);
+      } finally {
+        setFormButtonsToStatusDisabled(false);
+      }
     }
   };
 
   useEffect(() => {
-    dispatch(getBuilds(offset))
-      .then((res) => {
-        if (res.data.data.data.length === 10) {
+    let mounted = true;
+    (async() => {
+      try {
+        const res: any = await dispatch(getBuilds(offset));
+        if (mounted) {
+          if (res.data.data.data.length === 10) {
             setShowMore(true);
-        } else {
+          } else {
             setShowMore(false);
+          }
+          setBuilds([...builds, ...res.data.data.data]);
+          setIsLoaded(true);
         }
-        setBuilds([...builds, ...res.data.data.data]);
-        setIsLoaded(true);
-      })
-      .catch((e) => console.error(e));
-  }, [offset, dispatch]);
+      } catch(e) {
+        console.error(e);
+      }
+    })();
+    return () => {
+      mounted = false
+    };
+  }, [offset]);
 
   const showMoreHandler = () => {
     setOffset(offset + 10);
@@ -153,8 +164,8 @@ function History() {
               branch={item.branchName}
               hash={item.commitHash}
               commiter={item.authorName}
-              date={item.start || false}
-              duration={item.duration || false}
+              date={item.start}
+              duration={item.duration}
               onClick={openBuild}
             />
           ))}

@@ -6,7 +6,7 @@ import Icon from '../../components/Icon/Icon';
 import Button from '../../components/Button/Button';
 import './Start.scss';
 
-function Start(props) {
+const Start: React.FC = () => {
   return (
     <div className="content">
       <Header 
@@ -43,6 +43,7 @@ function Start(props) {
             <Link className="text_decoration_none" to="/settings">
               <Button
                 color="success"
+                size="m"
                 text={
                   <Text content="Open Settings" margin="m" />
                 }

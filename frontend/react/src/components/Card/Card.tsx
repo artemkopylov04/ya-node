@@ -5,7 +5,21 @@ import Date from '../Date/Date';
 import Icon from '../Icon/Icon';
 import './Card.scss';
 
-function Card(props) {
+export interface Card {
+  id?: string,
+  extended?: boolean,
+  ticket: string,
+  message: string,
+  branch: string,
+  hash: string,
+  status?: string,
+  commiter: string,
+  date?: string,
+  duration?: string,
+  onClick?: any,
+}
+
+const Card: React.FC<Card> = (props) => {
   let status;
   switch (props.status) {
     case 'Waiting':
@@ -38,7 +52,7 @@ function Card(props) {
   const middlewareClick = () => onClick(id);
 
   return (
-    <div className={`card card__extended_${extended}`} onClick={extended === 'false' ? middlewareClick : null}>
+    <div className={`card card__extended_${extended}`} onClick={extended === 'false' ? middlewareClick : undefined}>
       <div className="card__status">
         <Icon size="l" content={`icon_${status}`} />
       </div>
