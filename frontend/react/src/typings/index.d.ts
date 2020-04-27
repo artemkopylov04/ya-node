@@ -4,6 +4,10 @@ export interface onClick {
     (event: React.MouseEvent<HTMLElement>): void
 }
 
+export interface onChange {
+    (event: React.FormEvent<HTMLInputElement>): void
+}
+
 export interface Build {
     id: string,
     extended?: boolean,
@@ -15,8 +19,12 @@ export interface Build {
     authorName: string,
     start: string,
     duration?: string,
-    onClick?: any,
+    onClick?: onClick,
 }
+
+export interface Log {
+    content: string,
+  }
 
 export interface FormComponent {
     title: string,
@@ -26,8 +34,8 @@ export interface FormComponent {
     type: string,
     error?: string,
     placeholder: string,
-    clearHandler?: any,
-    onChangeHandler(event: React.FormEvent<HTMLInputElement>): any,
+    clearHandler?: onClick,
+    onChangeHandler: onChange,
     before?: string,
     after?: string,
 }
@@ -36,7 +44,10 @@ export interface Form {
     title: string,
     description: string,
     components: FormComponent[],
-    handlers: any,
+    handlers: {
+        submit: any,
+        cancel: any,
+    },
     error: {
         status: boolean,
         text: string,

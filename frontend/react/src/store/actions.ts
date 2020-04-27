@@ -1,6 +1,13 @@
 import axios from 'axios';
 import { Dispatch } from 'redux';
 import { Settings } from './state';
+import { Build } from '../typings';
+
+export interface apiBuild {
+  data: {
+    data: Build
+  }
+}
 
 export interface Action {
   type: string,
@@ -16,7 +23,7 @@ export const setSettings = (settings: Settings) => ({
   payload: settings,
 });
 
-export const setActiveBuild = (build: any) => ({
+export const setActiveBuild = (build: Build) => ({
   type: "SET_ACTIVE_BUILD",
   payload: build,
 });
@@ -91,13 +98,13 @@ export const getBuildDetails = (id: string | number) => {
     try {
       dispatch(setBuildLoading(false));
       dispatch(setLogLoading(false));
-      let build: any = axios.get(`/api/builds/${id}`)
-      let log: any = axios.get(`/api/builds/${id}/logs`);
-      build = await build;
-      dispatch(setActiveBuild(build.data.data.data));
+      const build = axios.get<apiBuild>(`/api/builds/${id}`);
+      const log = axios.get<string>(`/api/builds/${id}/logs`);
+      const buildResult = await build;
+      dispatch(setActiveBuild(buildResult.data.data.data));
       dispatch(setBuildLoading(true));
-      log = await log;
-      dispatch(setActiveLog(log.data));
+      const logResult = await log;
+      dispatch(setActiveLog(logResult.data));
       dispatch(setLogLoading(true));
     } catch(e) {
       console.error(e);

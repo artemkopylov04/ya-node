@@ -3,6 +3,7 @@ import Text from '../Text/Text';
 import Input from '../Input/Input';
 import Label from '../Label/Label';
 import './FormGroup.scss';
+import { onClick, onChange } from '../../typings';
 
 export interface FormGroup {
     label: {
@@ -16,8 +17,8 @@ export interface FormGroup {
         placeholder: string,
         error?: string,
         model: string | number,
-        changeHandler: any,
-        clearHandler: any,
+        changeHandler: onChange,
+        clearHandler?: onClick,
     },
     type?: string,
     style: string,

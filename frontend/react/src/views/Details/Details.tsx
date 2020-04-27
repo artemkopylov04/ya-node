@@ -1,8 +1,7 @@
 import React, { useEffect, Fragment } from 'react';
 import { Link, useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { getBuildDetails, reBuild,
-  setBuildLoading, setLogLoading } from '../../store/actions';
+import { getBuildDetails, reBuild } from '../../store/actions';
 import Header from '../../components/Header/Header';
 import Text from '../../components/Text/Text';
 import Button from '../../components/Button/Button';
@@ -12,12 +11,13 @@ import Log from '../../components/Log/Log';
 import './Details.scss';
 
 import { State, Settings } from '../../store/state';
+import { Build } from '../../typings';
 
 function Details() {
   const dispatch = useDispatch();
   const history = useHistory();
   const settings = useSelector<State, Settings>(state => state.settings);
-  const build = useSelector<State, any>(state => state.activeBuild.buildCard);
+  const build = useSelector<State, Build>(state => state.activeBuild.buildCard);
   const buildLoaded = useSelector<State, boolean>(state => state.activeBuild.buildCardLoaded);
   const log = useSelector<State, string>(state => state.activeBuild.buildLog);
   const logLoaded = useSelector<State, boolean>(state => state.activeBuild.buildLogLoaded);
@@ -30,8 +30,8 @@ function Details() {
 
   const onReBuild = async () => {
     try {
-      const { data }: any = await dispatch(reBuild(build.commitHash));
-      history.push(`/build/${data.data.data.id}`);
+      const res: any = await dispatch(reBuild(build.commitHash));
+      history.push(`/build/${res.data.data.data.id}`);
     } catch(e) {
       console.error(e)
     }

@@ -1,3 +1,5 @@
+import { Build } from "../typings";
+
 export interface Settings {
   repoName: string,
   buildCommand: string,
@@ -6,7 +8,7 @@ export interface Settings {
 }
 
 export interface buildPage {
-  buildCard: any,
+  buildCard: Build,
   buildCardLoaded: boolean,
   buildLog: string,
   buildLogLoaded: boolean,
@@ -30,7 +32,15 @@ export const defaultState: State = {
     period: 10
   },
   activeBuild: {
-    buildCard: {},
+    buildCard: {
+      id: '',
+      buildNumber: '',
+      commitMessage: '',
+      branchName: '',
+      commitHash: '',
+      authorName: '',
+      start: ''
+    },
     buildCardLoaded: false,
     buildLog: '',
     buildLogLoaded: false,

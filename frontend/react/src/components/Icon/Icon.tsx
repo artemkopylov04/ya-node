@@ -1,11 +1,13 @@
 import React from 'react';
 import './Icon.scss';
 
+import { onClick } from '../../typings'
+
 export interface Icon {
   content: string,
   size: string,
   additional?: string,
-  handler?: any,
+  handler?: onClick,
 }
 
 const Icon: React.FC<Icon> = ({size, content, additional = '', handler}) => {

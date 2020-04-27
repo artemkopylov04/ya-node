@@ -1,11 +1,11 @@
 import React from 'react';
 import Form from '../Form/Form';
 import './Popup.scss';
-import { FormComponent } from '../../typings';
+import { FormComponent, onClick } from '../../typings';
 
 interface Popup {
-  cancelHandler: any,
-  submitHandler: any,
+  cancelHandler: onClick,
+  submitHandler: onClick,
   error: string,
   errorStatus: boolean,
   components: FormComponent[],

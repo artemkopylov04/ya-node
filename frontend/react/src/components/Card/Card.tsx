@@ -6,11 +6,11 @@ import Icon from '../Icon/Icon';
 import './Card.scss';
 
 interface onClick {
-  (source: string, subString: string): boolean;
+  (id: string): void;
 }
 
 export interface Card {
-  id?: string,
+  id: string,
   extended?: boolean,
   ticket: string,
   message: string,
@@ -20,7 +20,7 @@ export interface Card {
   commiter: string,
   date?: string,
   duration?: string,
-  onClick?: any,
+  onClick?: onClick,
 }
 
 const Card: React.FC<Card> = (props) => {
@@ -53,7 +53,7 @@ const Card: React.FC<Card> = (props) => {
   const { duration } = props;
   const { onClick } = props;
 
-  const middlewareClick = () => onClick(id);
+  const middlewareClick = () => { if (onClick) onClick(id) };
 
   return (
     <div className={`card card__extended_${extended}`} onClick={extended === 'false' ? middlewareClick : undefined}>

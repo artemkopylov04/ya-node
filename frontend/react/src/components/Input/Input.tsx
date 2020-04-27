@@ -2,14 +2,15 @@ import React from 'react';
 import MaskedInput from 'react-text-mask';
 import Icon from '../Icon/Icon';
 import './Input.scss';
+import { onClick, onChange } from '../../typings';
 
 interface Input {
   type: string,
   inputClasses: string,
   placeholder: string,
   model: string | number,
-  clear: any,
-  handler: any,
+  clear?: onClick,
+  handler: onChange,
 }
 
 const Input: React.FC<Input> = ({

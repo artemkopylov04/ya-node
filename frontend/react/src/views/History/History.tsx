@@ -10,7 +10,7 @@ import Popup from '../../components/Popup/Popup';
 import './History.scss';
 import { runBuild, getBuilds, setFormButtonsToStatusDisabled } from '../../store/actions';
 
-import { Build } from '../../typings';
+import { Build, FormComponent } from '../../typings';
 import { State, Settings } from '../../store/state';
 
 function History() {
@@ -33,7 +33,7 @@ function History() {
   
   const openBuild = (id: string | number) => history.push(`/build/${id}`);
 
-  const components = [
+  const components: FormComponent[] = [
     {
       title: 'Enter the commit hash which you want to build',
       required: false,
@@ -43,8 +43,8 @@ function History() {
       error: hashError,
       placeholder: 'Commit hash',
       clearHandler() { setHash('') },
-      onChangeHandler(event: React.FormEvent<HTMLInputElement>) {
-        if (event.currentTarget.value.length > 0) setHashError('');
+      onChangeHandler(event) {
+        if (event.currentTarget.value && event.currentTarget.value.length > 0) setHashError('');
         setHash(event.currentTarget.value);
       }
     }
