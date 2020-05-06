@@ -1,4 +1,5 @@
 // Приложение отвечающее за билд
+import axios from 'axios';
 import {
   getBuilds,
   postRequestStart,
@@ -14,14 +15,20 @@ function builder() {
         switch (build.status) {
           case 'Waiting':
             postRequestStart(builds.data.data[i])
-              .then(() => console.log(`${build.id} is successfully started !`))
+              .then(() => {
+                console.log(`${build.id} is successfully started !`);
+                axios.get(`http://localhost:${process.env.WEB_PORT}/api/subscription/notification/start/${build.id}`);
+              })
               .catch(() => console.error('build start error'));
             break;
           case 'InProgress':
             const duration = Math.round(Math.random() * 50000); // eslint-disable-line
             setTimeout(() => {
               postRequestFinish(builds.data.data[i], duration)
-                .then(() => console.log(`${build.id} is successfully finished !`))
+                .then(() => {
+                  console.log(`${build.id} is successfully finished !`);
+                  axios.get(`http://localhost:${process.env.WEB_PORT}/api/subscription/notification/finish/${build.id}`);
+                })
                 .catch(() => console.error('build finish error'));
             }, duration);
             break;

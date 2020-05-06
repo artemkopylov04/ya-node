@@ -1,6 +1,8 @@
 import express from 'express';
 import Convert from 'ansi-to-html';
+import { AxiosResponse, AxiosError } from 'axios';
 
+import { sendPush } from '../pushAPI';
 import {
   getSettings,
   getBuilds,
@@ -11,7 +13,6 @@ import {
   postRepository,
   postHash,
 } from './requests';
-import { AxiosResponse, AxiosError } from 'axios';
 
 const {
   getCache,
@@ -74,5 +75,18 @@ router.post('/settings', async (req, res, next) => {
 router.post('/builds/:commitHash', (req, res, next) => postHash(req.params)
   .then((response: AxiosResponse) => send(res, response))
   .catch(() => next('post hash error')));
+
+router.post('/subscription/update', (req, res, next) => {
+  process.env.subscriptionObject = JSON.stringify(req.body);
+  console.log(process.env.subscriptionObject);
+  send(res, { status: 200, data: 'OK' });
+});
+
+router.get('/subscription/notification/:status/:id', (req, res, next) => {
+  if (typeof process.env.subscriptionObject === 'string' && process.env.subscriptionObject.length > 0) {
+    sendPush(JSON.parse(process.env.subscriptionObject), `${req.params.id}: status: ${req.params.status}!`)
+  }
+  res.sendStatus(200);
+});
 
 export = router;

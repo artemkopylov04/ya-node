@@ -51,17 +51,30 @@ export const setFormButtonsToStatusDisabled = (status: boolean) => ({
 export const getSettings = () => {
   return async (dispatch: Dispatch) => {
     try {
-      const res = await axios.get('/api/settings');
-      const data = res.data.data.data;
-      if (data) {
+      let settings = localStorage.getItem('settings');
+      if (settings) {
+        const parsedSettings = JSON.parse(settings);
         dispatch(setSettings({
-          repoName: data.repoName,
-          buildCommand: data.buildCommand,
-          mainBranch: data.mainBranch,
-          period: data.period,
+          repoName: parsedSettings.repoName,
+          buildCommand: parsedSettings.buildCommand,
+          mainBranch: parsedSettings.mainBranch,
+          period: parsedSettings.period,
         }));
+        dispatch(setAppLoaded());
+      } else { 
+        const res = await axios.get('/api/settings');
+        const data = res.data.data.data;
+        if (data) {
+          dispatch(setSettings({
+            repoName: data.repoName,
+            buildCommand: data.buildCommand,
+            mainBranch: data.mainBranch,
+            period: data.period,
+          }));
+          localStorage.setItem('settings', JSON.stringify(data));
+        }
+        dispatch(setAppLoaded());
       }
-      dispatch(setAppLoaded());
     } catch(e) {
       console.error(e);
     }
@@ -69,16 +82,19 @@ export const getSettings = () => {
 }
 
 export const setNewSettings = (settings: Settings) => {
-  return () => axios({
-    method: 'POST',
-    url: '/api/settings',
-    data: {
-      repoName: settings.repoName,
-      buildCommand: settings.buildCommand,
-      mainBranch: settings.mainBranch,
-      period: Number(settings.period),
-    },
-  });
+  return () => {
+    localStorage.removeItem('settings');
+    axios({
+      method: 'POST',
+      url: '/api/settings',
+      data: {
+        repoName: settings.repoName,
+        buildCommand: settings.buildCommand,
+        mainBranch: settings.mainBranch,
+        period: Number(settings.period),
+      },
+    });
+  }
 }
 
 export const runBuild = (hash: string) => {

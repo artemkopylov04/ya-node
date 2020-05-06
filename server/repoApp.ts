@@ -58,7 +58,7 @@ app.use((err: string, req: express.Request, res: express.Response) => {
 });
 
 // Пул изменений + добавление в process.env настроек
-(async function pullRepo() {
+async function pullRepo() {
   const { data } = await getSettings();
 
   if (data && data.data && data.data.period) {
@@ -76,10 +76,8 @@ app.use((err: string, req: express.Request, res: express.Response) => {
       console.error('pull');
     }
   }
+};
 
-  setTimeout(() => {
-    pullRepo();
-  }, Number(process.env.period) || 10 * 60 * 1000);
-}());
+pullRepo().then(() => setInterval(pullRepo, (Number(process.env.period) || 10) * 60 * 1000));
 
 module.exports = app;
