@@ -1,0 +1,74 @@
+@import '../../scss/vars';
+
+.form {
+    max-width: 474px;
+
+    &__group {
+        display: flex;
+        margin-bottom: 18px;
+
+        &_column {
+            flex-direction: column;
+        }
+
+        &_inline {
+            align-items: center;
+        }
+    }
+
+    &__label {
+        line-height: 18px;
+        letter-spacing: 0.06px;
+        margin-bottom: 6px;
+    }
+
+    &__input {
+        position: relative;
+
+        &_clear-icon {
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        &_number {
+            margin: 0 9px;
+        }
+    }
+    
+    &__title {
+        font-weight: bold;
+        height: 20px;
+        margin: 8px 0;
+    }
+
+    &__description {
+        color: #7F8285;
+        height: 18px;
+        letter-spacing: 0.06px;
+        margin-bottom: 21px;
+    }
+
+    &__buttons {
+        display: flex;
+
+        @media (max-width: $breakpoint_small) {
+            flex-direction: column;
+        }
+    }
+
+    &__btn_save {
+        margin-right: 10px;
+
+        @media (max-width: $breakpoint_small) {
+            margin-right: 0;
+            margin-bottom: 12px;
+        }
+    }
+    
+    &__error {
+        line-height: 35px;
+        color: #FA8072;
+    }
+}

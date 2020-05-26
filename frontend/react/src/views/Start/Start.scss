@@ -1,0 +1,22 @@
+
+.start {    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    &__open-settings-button {
+        max-width: 300px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        text-decoration: none;
+    }
+}
+
+.start-message {
+    max-width: 264px;
+    text-align: center;
+    line-height: 125%;
+    margin: 32px 0 24px;
+}

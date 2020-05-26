@@ -68,6 +68,11 @@ router.post('/settings', async (req, res) => {
     console.error('check repo error');
   }
 
+  if (error) {
+    res.sendStatus(500);
+    return;
+  }
+
   try {
     await instance({
       method: 'post',
@@ -80,15 +85,11 @@ router.post('/settings', async (req, res) => {
       },
       headers: authHeader,
     });
-  } catch (e) {
-    error = true;
-    console.error('post conf error');
-  }
 
-  if (error) {
-    res.sendStatus(500);
-  } else {
     res.sendStatus(200);
+  } catch (e) {
+    res.sendStatus(500);
+    console.error('post conf error');
   }
 });
 

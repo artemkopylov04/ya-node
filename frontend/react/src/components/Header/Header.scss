@@ -1,0 +1,27 @@
+.header {
+    display: flex;
+    justify-content: center;
+    height: 50px;
+
+    &__container {
+        display: flex;
+        flex: 1;
+        justify-content: space-between;
+        align-items: center;
+
+        max-width: 824px;
+		min-width: 320px;
+		padding: 0 16px;
+    }
+
+    &__title {
+        font-weight: 500;
+        letter-spacing: 0.25px;
+    }
+
+    &__buttons {
+        display: grid;
+        grid-auto-flow: column;
+        grid-gap: 8px;
+    }
+}
