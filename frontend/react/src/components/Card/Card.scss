@@ -91,7 +91,7 @@
         &-hash {
             color: #595959;
             margin-right: 10px;
-            max-width: 120px;
+            word-break: break-word;
         }
 
         &-name, &-icon {
@@ -107,8 +107,8 @@
 
     &__user {
         &-name, &-icon {
-            max-width: 120px;
             margin-right: 4px;
+            word-break: break-word;
         }
     }
 

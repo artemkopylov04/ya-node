@@ -1,61 +1,38 @@
 // Приложение отвечающее за билд
-const { instance, authHeader } = require('./helpers/request');
+const {
+  getBuilds,
+  postRequestStart,
+  postRequestFinish,
+} = require('./api/requests');
 
-function errorHandler(message) {
-  console.error(message);
-}
-
-(async function builder() {
-  setTimeout(async () => {
-    try {
-      const builds = await instance({
-        method: 'get',
-        url: `${process.env.API_URL}/build/list`,
-        headers: authHeader,
-      });
-
+function builder() {
+  getBuilds(10, 0)
+    .then((builds) => {
+      if (builds.data.data.length === 0) console.log('empty builds');
       for (let i = builds.data.data.length - 1; i >= 0; i -= 1) {
         const build = builds.data.data[i];
-        (async () => {
-          if (build.status === 'Waiting') {
-            try {
-              await instance({
-                method: 'post',
-                url: `${process.env.API_URL}/build/start`,
-                data: {
-                  buildId: build.id,
-                  dateTime: new Date().toISOString(),
-                },
-                headers: authHeader,
-              });
-            } catch (e) { errorHandler('/build/start error'); }
-          }
-
-          if (build.status === 'InProgress') {
-            setTimeout(async () => {
-              try {
-                await instance({
-                  method: 'post',
-                  url: `${process.env.API_URL}/build/finish`,
-                  data: {
-                    buildId: build.id,
-                    success: true,
-                    duration: 6789,
-                    buildLog: Math.random().toString(36),
-                  },
-                  headers: authHeader,
-                });
-              } catch (e) { errorHandler('/build/finish error'); }
-            }, 6789);
-          }
-        })();
+        switch (build.status) {
+          case 'Waiting':
+            postRequestStart(builds.data.data[i])
+              .then(() => console.log(`${build.id} is successfully started !`))
+              .catch(() => console.error('build start error'));
+            break;
+          case 'InProgress':
+            const duration = Math.round(Math.random() * 50000); // eslint-disable-line
+            setTimeout(() => {
+              postRequestFinish(builds.data.data[i], duration)
+                .then(() => console.log(`${build.id} is successfully finished !`))
+                .catch(() => console.error('build finish error'));
+            }, duration);
+            break;
+          default:
+            break;
+        }
       }
+    })
+    .catch(() => console.error('list error'))
+    .finally(() => setTimeout(builder, 60 * 1000)); // process.env.period
+}
 
-      builder();
-    } catch (e) {
-      errorHandler('list error');
-    }
-  }, 3000);
-}());
-
+builder();
 console.log('builder is running');

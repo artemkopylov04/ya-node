@@ -1,185 +1,77 @@
 const express = require('express');
 const Convert = require('ansi-to-html');
 
-const { instance, authHeader } = require('../helpers/request');
+const {
+  getSettings,
+  getBuilds,
+  getBuild,
+  getBuildLog,
+  deleteSettings,
+  postSettings,
+  postRepository,
+  postHash,
+} = require('./requests');
+
+const {
+  getCache,
+  send,
+} = require('./apiHelpers');
 
 const router = express.Router();
-
 const convert = new Convert();
-
 const cacheLogs = {};
 
-router.get('/settings', async (req, res, next) => {
-  try {
-    const settingsReq = await instance({
-      method: 'get',
-      url: `${process.env.API_URL}/conf`,
-      headers: authHeader,
-    });
+// GET
+router.get('/settings', (req, res, next) => getSettings()
+  .then((response) => send(res, response))
+  .catch(() => next('get settings error')));
 
-    res.json({
-      status: settingsReq.status,
-      data: settingsReq.data,
-    });
+router.get('/builds', (req, res, next) => getBuilds(req.query)
+  .then((response) => send(res, response))
+  .catch(() => next('get all builds error')));
+
+router.get('/builds/:buildId', (req, res, next) => getBuild(req.params)
+  .then((response) => send(res, response))
+  .catch((e) => (e.response.status === 400
+    ? res.sendStatus(400)
+    : next('get build error'))));
+
+router.get('/builds/:buildId/logs', (req, res, next) => {
+  const cache = getCache(req.params, cacheLogs);
+
+  if (!cache) {
+    getBuildLog(req.params, cacheLogs)
+      .then(({ data }) => {
+        if (data.length > 0 && Object.keys(cacheLogs).length < 1000) {
+          const log = convert.toHtml(data);
+
+          cacheLogs[req.params.buildId] = { data: log, timeout: Date.now() };
+
+          res.send(log);
+        } else {
+          res.send('');
+        }
+      })
+      .catch((e) => (e.response.status === 400
+        ? res.sendStatus(400)
+        : next('get build error')));
+  } else res.send(cache);
+});
+
+// POST
+router.post('/settings', async (req, res, next) => {
+  try {
+    await deleteSettings();
+    await postRepository(req.body);
+    const response = await postSettings(req.body);
+    send(res, response);
   } catch (e) {
-    next(e);
+    next('post settings error');
   }
 });
 
-router.post('/settings', async (req, res) => {
-  const {
-    repoName, mainBranch, buildCommand, period,
-  } = req.body;
-
-  let error;
-
-  try {
-    await instance({
-      method: 'delete',
-      url: `${process.env.API_URL}/conf`,
-      headers: authHeader,
-    });
-  } catch (e) {
-    error = true;
-    console.error('delete conf error');
-  }
-
-  try {
-    await instance({
-      method: 'delete',
-      url: `${process.env.REPO_URL}:${process.env.REPO_PORT}/destroy`,
-    });
-  } catch (e) {
-    error = true;
-    console.error('delete repo error');
-  }
-
-  try {
-    await instance({
-      method: 'post',
-      url: `${process.env.REPO_URL}:${process.env.REPO_PORT}/check`,
-      data: {
-        repoName,
-        mainBranch,
-      },
-    });
-  } catch (e) {
-    error = true;
-    console.error('check repo error');
-  }
-
-  if (error) {
-    res.sendStatus(500);
-    return;
-  }
-
-  try {
-    await instance({
-      method: 'post',
-      url: `${process.env.API_URL}/conf`,
-      data: {
-        repoName: repoName || 'default',
-        buildCommand: buildCommand || 'default',
-        mainBranch: mainBranch || 'master',
-        period: period || 0,
-      },
-      headers: authHeader,
-    });
-
-    res.sendStatus(200);
-  } catch (e) {
-    res.sendStatus(500);
-    console.error('post conf error');
-  }
-});
-
-router.get('/builds', async (req, res, next) => {
-  try {
-    const buildsReq = await instance({
-      method: 'get',
-      url: `${process.env.API_URL}/build/list?limit=${req.query.limit || 10}&offset=${req.query.offset || 0}`,
-      headers: authHeader,
-    });
-
-    res.json({
-      status: buildsReq.status,
-      data: buildsReq.data,
-    });
-  } catch (e) {
-    next(e);
-  }
-});
-
-router.get('/builds/:buildId', async (req, res, next) => {
-  try {
-    const buildIdReq = await instance({
-      method: 'get',
-      url: `${process.env.API_URL}/build/details?buildId=${req.params.buildId}`,
-      headers: authHeader,
-    });
-
-    res.json({
-      status: buildIdReq.status,
-      data: buildIdReq.data,
-    });
-  } catch (e) {
-    if (e.response.status === 400) {
-      res.sendStatus(400);
-    } else {
-      next(e);
-    }
-  }
-});
-
-
-// Добавил кэш в оперативку, просрок через 5 минут
-// От переполнения стоит защита на максимум 1000 записей
-// правда нигде не чистится от старости
-router.get('/builds/:buildId/logs', async (req, res, next) => {
-  if (cacheLogs[req.params.buildId]
-     && (Math.abs(cacheLogs[req.params.buildId].timeout - Date.now())) < 5 * 60 * 1000) {
-    res.send(cacheLogs[req.params.buildId].data);
-  } else {
-    try {
-      const buildLogReq = await instance({
-        method: 'get',
-        url: `${process.env.API_URL}/build/log?buildId=${req.params.buildId}`,
-        headers: authHeader,
-      });
-
-      if (buildLogReq.data.length > 0 && Object.keys(cacheLogs).length < 1000) {
-        const log = convert.toHtml(buildLogReq.data);
-
-        cacheLogs[req.params.buildId] = { data: log, timeout: Date.now() };
-
-        res.send(log);
-      } else { res.send(''); }
-    } catch (e) {
-      if (e.response.status === 400) {
-        res.sendStatus(400);
-      } else {
-        next(e);
-      }
-    }
-  }
-});
-
-router.post('/builds/:commitHash', async (req, res, next) => {
-  try {
-    const { commitHash } = req.params;
-
-    const build = await instance({
-      method: 'post',
-      url: `${process.env.REPO_URL}:${process.env.REPO_PORT}/add`,
-      data: {
-        commitHash,
-      },
-    });
-
-    res.json(build.data);
-  } catch (e) {
-    next(e);
-  }
-});
+router.post('/builds/:commitHash', (req, res, next) => postHash(req.params)
+  .then((response) => send(res, response))
+  .catch(() => next('post hash error')));
 
 module.exports = router;

@@ -29,9 +29,9 @@ function App() {
               mainBranch: data.mainBranch,
               period: data.period,
           }));
+          setIsLoaded(true);
       })
-      .catch((e) => console.error(e))
-      .finally(() => setIsLoaded(true));
+      .catch((e) => console.error(e));
   }, [dispatch]);
 
   return (

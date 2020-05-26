@@ -96,11 +96,11 @@ function Settings() {
         }))
         .then(() => {
           dispatch(setSettings({
-            repoName: settings.repoName,
-            buildCommand: settings.buildCommand,
-            mainBranch: settings.mainBranch,
-            period: settings.period,
-          }));
+            repoName,
+            buildCommand,
+            mainBranch,
+            period,
+        }));
   
           history.push('/');
         })
