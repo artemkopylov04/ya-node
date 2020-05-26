@@ -4,7 +4,7 @@ module.exports = {
   apps: [
     {
       name: 'ci-server',
-      script: 'services.js',
+      script: './dist/services.js',
 
       autorestart: true,
       max_memory_restart: '1G',
@@ -13,7 +13,7 @@ module.exports = {
     },
     {
       name: 'builder',
-      script: 'builderService.js',
+      script: './dist/builderService.js',
 
       autorestart: true,
       max_memory_restart: '1G',

@@ -1,6 +1,7 @@
 module.exports = (NODE_ENV) => ({
   NODE_ENV,
   TOKEN: 'token',
+  PUSH_PRIVATE_KEY: 'key',
   GIT_URL: 'https://github.com',
   API_URL: 'https://hw.shri.yandex/api',
   REPO_URL: 'http://localhost',

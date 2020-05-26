@@ -6,6 +6,10 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
+    "@types/react": "^16.9.34",
+    "@types/react-redux": "^7.1.7",
+    "@types/react-router-dom": "^5.1.4",
+    "@types/react-text-mask": "^5.4.6",
     "ansi-to-html": "^0.6.14",
     "axios": "^0.19.2",
     "date-fns": "^2.11.1",
@@ -17,13 +21,15 @@
     "react-text-mask": "^5.4.3",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
-    "sass": "^1.26.3"
+    "sass": "^1.26.3",
+    "typescript": "^3.8.3"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "generate-sw": "npx gulp generate-service-worker"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -42,6 +48,8 @@
   },
   "proxy": "http://localhost:4000",
   "devDependencies": {
-    "eslint-config-airbnb": "^18.1.0"
+    "eslint-config-airbnb": "^18.1.0",
+    "gulp": "^4.0.2",
+    "workbox-build": "^5.1.3"
   }
 }
