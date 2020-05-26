@@ -8,6 +8,11 @@ export const rootReducer = (state = defaultState, action: Action): State => {
         ...state,
         isLoaded: true,
       };
+    case "CHANGE_LANG":
+      return {
+        ...state,
+        lang: action.payload,
+      };
     case "SET_SETTINGS":
       return {
         ...state,

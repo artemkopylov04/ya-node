@@ -35,7 +35,7 @@ function History() {
 
   const components: FormComponent[] = [
     {
-      title: 'Enter the commit hash which you want to build',
+      title: 'hashDescription',
       required: false,
       state: hash,
       style: 'column',
@@ -126,7 +126,7 @@ function History() {
               size="s"
               additional="button_size_text-with-icon"
               text={
-                <Text content="Run build" margin="s" additional="text_margin_s_with-icon text_mobile_hidden" />
+                <Text messageId="runBuild" content="Run build" margin="s" additional="text_margin_s_with-icon text_mobile_hidden" />
               }
               icon = {
                 <Icon 

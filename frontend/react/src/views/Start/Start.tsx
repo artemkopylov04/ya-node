@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import Header from '../../components/Header/Header';
 import Text from '../../components/Text/Text';
 import Icon from '../../components/Icon/Icon';
@@ -7,11 +7,16 @@ import Button from '../../components/Button/Button';
 import './Start.scss';
 
 const Start: React.FC = () => {
+
+  const history = useHistory();
+
+  const toSettings = () => history.push("/settings");
+
   return (
     <div className="content">
       <Header 
         title = {
-          <Text size="xl" color="title" content="School CI server" />
+          <Text size="xl" color="title" messageId="schoolCIServer" content="School CI server" />
         }
 
         buttons = {
@@ -21,7 +26,7 @@ const Start: React.FC = () => {
               size="s"
               additional="button_size_text-with-icon"
               text={
-                <Text content="Settings" margin="s" additional="text_margin_s_with-icon text_mobile_hidden" />
+                <Text content="Settings" messageId="settings" margin="s" additional="text_margin_s_with-icon text_mobile_hidden" />
               }
               icon = {
                 <Icon 
@@ -37,18 +42,17 @@ const Start: React.FC = () => {
         <div className="main__container start">
           <Icon size="xxxl" content="icon_start" additional="card__commit-date-icon" />
           <div className="start-message">
-            <Text content="Configure repository connection and synchronization settings" />
+            <Text messageId="settingsDescription" content="Configure repository connection and synchronization settings" />
           </div>
           <div className="start__open-seetings-button">
-            <Link className="text_decoration_none" to="/settings">
-              <Button
-                color="success"
-                size="m"
-                text={
-                  <Text content="Open Settings" margin="m" />
-                }
-              />
-            </Link>
+            <Button
+              color="success"
+              size="m"
+              text={
+                <Text messageId="openSettings" content="Open Settings" margin="m" />
+              }
+              onClick={toSettings}
+            />
           </div>
         </div>
       </div>

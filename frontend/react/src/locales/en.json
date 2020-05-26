@@ -1,0 +1,21 @@
+{
+    "settings": "Settings",
+    "openSettings": "Open settings",
+    "runBuild": "Run build",
+    "reBuild": "Rebuild",
+    "settingsDescription": "Configure repository connection and synchronization settings",
+    "schoolCIServer": "School CI Server",
+    "gitHubRepos": "GitHub repository",
+    "buildCommand": "Build command",
+    "mainBranch": "Main branch",
+    "save": "Save",
+    "cancel": "Cancel",
+    "popupTitleBuild": "New Build",
+    "hashDescription": "Enter the commit hash which you want to build",
+    "support": "Support",
+    "learning": "Learning",
+    "changeLang": "Русская версия",
+    "synchronize": "<before>Synchronize every</before> {x} <after>minutes</after>",
+    "durationMinutesOnly": "{minutes} min",
+    "durationMinutesAndHours": "{hours} h {minutes} min"
+}

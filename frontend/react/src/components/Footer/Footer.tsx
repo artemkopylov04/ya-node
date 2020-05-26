@@ -2,8 +2,16 @@ import React from 'react';
 import Button from '../Button/Button';
 import Text from '../Text/Text';
 import './Footer.scss';
+import { useDispatch } from 'react-redux';
+import { changeLang as cL } from '../../store/actions';
+
 
 function Footer() {
+
+  const dispatch = useDispatch();
+
+  const changeLang = () => dispatch(cL());
+
   return (
     <div className="footer">
       <div className="footer__container">
@@ -13,7 +21,7 @@ function Footer() {
               color="link"
               size="s"
               text={
-                <Text content="Support" />
+                <Text messageId="support" content="Support" />
               }
             />
           </div>
@@ -22,8 +30,18 @@ function Footer() {
               color="link"
               size="s"
               text={
-                <Text content="Learning" />
+                <Text messageId="learning" content="Learning" />
               }
+            />
+          </div>
+          <div className="footer__link">
+            <Button
+              color="link"
+              size="s"
+              text={
+                <Text messageId="changeLang" content="Русская версия" />
+              }
+              onClick={changeLang}
             />
           </div>
         </div>
