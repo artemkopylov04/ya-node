@@ -20,15 +20,15 @@ const Popup: React.FC<Popup> = ({
       <div className="popup">
         <div className="popup__container">
           <Form 
-            title="New build" 
+            title="popupTitleBuild" 
             description=""
             components={components}
             handlers={{
               submit: submitHandler,
               cancel: cancelHandler
             }}
-            submitText='Run build'
-            cancelText='Cancel'
+            submitText='runBuild'
+            cancelText='cancel'
             error={{
               text: error,
               status: errorStatus,

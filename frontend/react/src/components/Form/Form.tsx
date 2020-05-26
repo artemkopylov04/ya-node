@@ -23,11 +23,11 @@ const Form: React.FC<F> = ({title, description, components, handlers, error, sub
   return (
     <div className="form">
       <div className="form__title">
-        <Text size="l" content={title} />
+        <Text size="l" messageId={title} content={title} />
       </div>
       { description && 
       <div className="form__description">
-        <Text content={description} />
+        <Text messageId={description} content={description} />
       </div> }
       {components.map((component: FormComponent, index: number) => {
         return (
@@ -63,7 +63,7 @@ const Form: React.FC<F> = ({title, description, components, handlers, error, sub
           size="m"
           additional="form__btn_save"
           text={
-            <Text content={submitText} margin="m" />
+            <Text messageId="save" content={submitText} margin="m" />
           }
           onClick={onSubmit}
         />
@@ -73,7 +73,7 @@ const Form: React.FC<F> = ({title, description, components, handlers, error, sub
           size="m"
           additional="form__btn_cancel"
           text={
-            <Text content={cancelText} margin="m" />
+            <Text messageId="cancel" content={cancelText} margin="m" />
           }
           onClick={onCancel}
         />

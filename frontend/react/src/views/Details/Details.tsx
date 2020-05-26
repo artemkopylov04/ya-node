@@ -55,7 +55,7 @@ function Details() {
               size="s"
               additional="button_size_text-with-icon"
               text={
-                <Text content="Rebuild" margin="s" additional="text_margin_s_with-icon text_mobile_hidden" />
+                <Text messageId="reBuild" content="Rebuild" margin="s" additional="text_margin_s_with-icon text_mobile_hidden" />
               }
               icon = {
                 <Icon 

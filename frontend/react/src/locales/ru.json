@@ -1,0 +1,22 @@
+{
+    "settings": "Настройки",
+    "openSettings": "Открыть настройки",
+    "runBuild": "Запустить сборку",
+    "reBuild": "Перезапустить сборку",
+    "settingsDescription": "Настройка соединения с репозиторием и синхронизации",
+    "schoolCIServer": "Школьный CI сервер",
+    "gitHubRepos": "GitHub репозиторий",
+    "buildCommand": "Команда сборки",
+    "mainBranch": "Главная ветка",
+    "hashPlaceholder": "Хэш билда",
+    "hashDescription": "Вставь хэш коммита, который хочешь билдить",
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "popupTitleBuild": "Новый билд",
+    "support": "Поддержка",
+    "learning": "Обучение",
+    "changeLang": "English version",
+    "synchronize": "<before>Синхронизировать каждые</before> {x} <after>минут</after>",
+    "durationMinutesOnly": "{minutes} мин",
+    "durationMinutesAndHours": "{hours} ч {minutes} мин"
+}

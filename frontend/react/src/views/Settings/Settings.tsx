@@ -31,7 +31,7 @@ function Settings() {
 
   const components: FormComponent[] = [
     {
-      title: 'GitHub repository',
+      title: 'gitHubRepos',
       required: true,
       state: repoName,
       style: 'column',
@@ -45,7 +45,7 @@ function Settings() {
       }
     },
     {
-      title: 'Build command',
+      title: 'buildCommand',
       required: true,
       state: buildCommand,
       style: 'column',
@@ -59,7 +59,7 @@ function Settings() {
       }
     },
     {
-      title: 'Main Branch',
+      title: 'mainBranch',
       required: false,
       state: mainBranch,
       style: 'column',
@@ -70,13 +70,11 @@ function Settings() {
         setMainBranch(event.currentTarget.value),
     },
     {
-      title: '',
+      title: 'synchronize',
       state: period,
       required: false,
       style: 'inline',
       type: 'number',
-      before: 'Synchronize every',
-      after: 'minutes',
       placeholder: '15',
       onChangeHandler: (event: React.FormEvent<HTMLInputElement>) => 
         setPeriod(event.currentTarget.value),
@@ -134,14 +132,14 @@ function Settings() {
     <div className="content">
       <Header 
         title = {
-          <Text size="xl" color="title" content="School CI server" />
+          <Text size="xl" color="title" messageId="schoolCIServer" content="School CI server" />
         }
       />
       <div className="main">
         <div className="main__container">
           <Form 
-            title="Settings" 
-            description="Configure repository connection and synchronization settings."
+            title="settings" 
+            description="settingsDescription"
             components={components}
             handlers={{
               submit: handleSubmit,

@@ -15,6 +15,7 @@ export interface buildPage {
 }
 
 export interface State {
+  lang: string,
   settingsSetted: boolean,
   isLoaded: boolean,
   settings: Settings,
@@ -23,6 +24,7 @@ export interface State {
 }
 
 export const defaultState: State = {
+  lang: localStorage.getItem('lang') || 'none',
   settingsSetted: false,
   isLoaded: false,
   settings: {

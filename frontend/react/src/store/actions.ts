@@ -18,6 +18,22 @@ export const setAppLoaded = () => ({
   type: "SET_APP_LOADED",
 });
 
+export const changeLang = () => {
+
+  let lang = localStorage.getItem('lang');
+
+  if (lang === 'ru') { lang = 'en' } else {
+    lang = 'ru';
+  }
+
+  localStorage.setItem('lang', lang)
+
+  return {
+    type: "CHANGE_LANG",
+    payload: lang,
+  }
+};
+
 export const setSettings = (settings: Settings) => ({
   type: "SET_SETTINGS",
   payload: settings,
